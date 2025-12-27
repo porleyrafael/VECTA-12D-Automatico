@@ -1,0 +1,11 @@
+{
+  "modo_seguro": true,
+  "eliminar_vacios": true,
+  "dias_para_logs": 7,
+  "tamano_max_mb": 100,
+  "exclusiones": [
+    "mi_archivo_especial.txt",
+    "backups/"
+  ],
+  "notas": "Configuración del limpiador VECTA 12D"
+}
