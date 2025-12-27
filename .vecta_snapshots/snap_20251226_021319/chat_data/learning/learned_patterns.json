@@ -1,0 +1,43 @@
+{
+  "patterns": [
+    {
+      "input": "crea archivo prueba_simple.py",
+      "action": "create_file",
+      "params": {
+        "file_name": "prueba_simple.py"
+      },
+      "timestamp": "2025-12-26T01:34:58.429831"
+    },
+    {
+      "input": "construye módulo",
+      "action": "create_file",
+      "params": {
+        "file_name": "módulo.py"
+      },
+      "timestamp": "2025-12-26T01:36:03.873979"
+    }
+  ],
+  "command_mappings": {
+    "crea archivo prueba_simple.py": {
+      "action": "create_file",
+      "params": {
+        "file_name": "prueba_simple.py"
+      },
+      "learned_at": "2025-12-26T01:34:58.429796",
+      "uses": 0
+    },
+    "construye módulo": {
+      "action": "create_file",
+      "params": {
+        "file_name": "módulo.py"
+      },
+      "learned_at": "2025-12-26T01:36:03.873912",
+      "uses": 1
+    }
+  },
+  "statistics": {
+    "total_learned": 2,
+    "successful_uses": 1,
+    "last_updated": "2025-12-26T01:36:03.873993"
+  }
+}

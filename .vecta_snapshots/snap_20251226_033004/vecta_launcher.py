@@ -1,0 +1,365 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+VECTA 12D LAUNCHER - Sistema Autoprogramable
+============================================
+Lanzador principal del sistema de 12 dimensiones vectoriales.
+"""
+
+import sys
+import os
+# AUTO-SNAPSHOT SYSTEM - Se ejecuta cada vez que inicias VECTA
+try:
+    from vecta_snapshot_system import VECTA_SnapshotSystem
+    snapshot_system = VECTA_SnapshotSystem()
+    snapshot_system.create_snapshot("VECTA launcher ejecutado")
+except ImportError:
+    print("Info: Sistema de snapshots no disponible")
+except Exception as e:
+    print(f"Info: Error en sistema de snapshots: {e}")
+import traceback
+from datetime import datetime
+
+# Configurar path para importaciones
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, BASE_DIR)
+
+def mostrar_banner():
+    """Muestra el banner de inicio del sistema."""
+    print("\n" + "=" * 70)
+    print("╔══════════════════════════════════════════════════════════════╗")
+    print("║                   VECTA 12D - SISTEMA AUTOPROGRAMABLE        ║")
+    print("║                   12 Dimensiones Vectoriales                 ║")
+    print("╚══════════════════════════════════════════════════════════════╝")
+    print("=" * 70)
+    print(f"Inicio: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"Directorio: {BASE_DIR}")
+    print("=" * 70)
+
+def inicializar_sistema():
+    """Inicializa y verifica todos los componentes del sistema."""
+    print("\n[1/3] 🚀 INICIALIZANDO SISTEMA VECTA 12D...")
+    
+    # Verificar estructura de directorios
+    directorios_necesarios = ['core', 'dimensiones']
+    for dir_name in directorios_necesarios:
+        if not os.path.exists(dir_name):
+            print(f"  ❌ ERROR: Directorio '{dir_name}' no encontrado")
+            return None
+        print(f"  ✓ Directorio '{dir_name}' encontrado")
+    
+    # Verificar archivos críticos
+    archivos_criticos = [
+        'core/vecta_12d_core.py',
+        'dimensiones/vector_12d.py'
+    ]
+    
+    for archivo in archivos_criticos:
+        if not os.path.exists(archivo):
+            print(f"  ❌ ERROR: Archivo '{archivo}' no encontrado")
+            return None
+        print(f"  ✓ Archivo '{archivo}' encontrado")
+    
+    return True
+
+def cargar_nucleo():
+    """Carga el núcleo principal de VECTA 12D."""
+    print("\n[2/3] ⚙️ CARGANDO NÚCLEO VECTA 12D...")
+    
+    try:
+        # Importar núcleo principal
+        from core.vecta_12d_core import VECTA_12D_Core
+        
+        # Crear instancia
+        vecta = VECTA_12D_Core()
+        
+        # Verificar dimensiones
+        if hasattr(vecta, 'dimensiones'):
+            num_dimensiones = len(vecta.dimensiones)
+            print(f"  ✓ Núcleo cargado: {num_dimensiones} dimensiones activas")
+        else:
+            print(f"  ✓ Núcleo cargado (atributo 'dimensiones' no disponible)")
+        
+        return vecta
+        
+    except ImportError as e:
+        print(f"  ❌ ERROR de importación: {e}")
+        print(f"  Traceback: {traceback.format_exc()}")
+        return None
+    except Exception as e:
+        print(f"  ❌ ERROR inesperado: {e}")
+        return None
+
+def cargar_sistema_vectorial():
+    """Carga el sistema vectorial 12D."""
+    print("\n[3/3] 🔄 CARGANDO SISTEMA VECTORIAL 12D...")
+    
+    try:
+        from dimensiones.vector_12d import SistemaVectorial12D
+        
+        sistema = SistemaVectorial12D()
+        
+        # Intentar obtener número de dimensiones
+        try:
+            num_dim = sistema.obtener_numero_dimensiones()
+            print(f"  ✓ Sistema vectorial: {num_dim} dimensiones cargadas")
+        except:
+            # Si falla, intentar método alternativo
+            if hasattr(sistema, 'dimensiones'):
+                print(f"  ✓ Sistema vectorial: {len(sistema.dimensiones)} dimensiones cargadas")
+            else:
+                print(f"  ✓ Sistema vectorial cargado (método de conteo no disponible)")
+        
+        return sistema
+        
+    except Exception as e:
+        print(f"  ⚠️ Sistema vectorial no disponible: {e}")
+        return None
+
+def mostrar_menu_principal():
+    """Muestra el menú principal de opciones."""
+    print("\n" + "═" * 70)
+    print("MENÚ PRINCIPAL - VECTA 12D")
+    print("═" * 70)
+    print("1. Procesar texto/comando")
+    print("2. Ver estado del sistema")
+    print("3. Probar dimensiones individuales")
+    print("4. Ejecutar autodiagnóstico")
+    print("5. Generar vector 12D aleatorio")
+    print("6. Sistema META-VECTA (Nuevo)")
+    print("7. Salir del sistema")
+    print("═" * 70)
+
+def procesar_opcion(opcion, vecta, sistema_vectorial):
+    """Procesa la opción seleccionada del menú."""
+    
+    if opcion == "1":
+        # Procesar entrada de texto
+        entrada = input("\n📝 Ingrese texto/comando a procesar: ").strip()
+        if entrada:
+            print(f"\n🔄 Procesando: '{entrada}'")
+            try:
+                resultado = vecta.procesar(entrada)
+                print(f"\n✅ RESULTADO:")
+                print(f"   Entrada: {entrada}")
+                print(f"   Salida: {resultado}")
+                
+                # Si hay sistema vectorial, procesar también allí
+                if sistema_vectorial:
+                    evento = {"texto": entrada, "timestamp": datetime.now().isoformat()}
+                    vector_resultado = sistema_vectorial.procesar_evento(evento)
+                    print(f"   Vector 12D generado: Sí")
+                    
+            except Exception as e:
+                print(f"❌ Error al procesar: {e}")
+        else:
+            print("⚠️ Entrada vacía, no se procesó nada")
+    
+    elif opcion == "2":
+        # Ver estado del sistema
+        print("\n📊 ESTADO DEL SISTEMA VECTA 12D")
+        print("─" * 40)
+        print(f"Hora del sistema: {datetime.now().strftime('%H:%M:%S')}")
+        print(f"Directorio de trabajo: {BASE_DIR}")
+        
+        # Información del núcleo
+        if vecta:
+            print(f"\nNÚCLEO VECTA:")
+            print(f"  • Clase: {vecta.__class__.__name__}")
+            if hasattr(vecta, 'dimensiones'):
+                print(f"  • Dimensiones activas: {len(vecta.dimensiones)}")
+            if hasattr(vecta, 'historial'):
+                print(f"  • Procesamientos en historial: {len(vecta.historial)}")
+        
+        # Información del sistema vectorial
+        if sistema_vectorial:
+            print(f"\nSISTEMA VECTORIAL 12D:")
+            print(f"  • Clase: {sistema_vectorial.__class__.__name__}")
+            try:
+                num_dim = sistema_vectorial.obtener_numero_dimensiones()
+                print(f"  • Dimensiones cargadas: {num_dim}")
+            except:
+                if hasattr(sistema_vectorial, 'dimensiones'):
+                    print(f"  • Dimensiones cargadas: {len(sistema_vectorial.dimensiones)}")
+    
+    elif opcion == "3":
+        # Probar dimensiones individuales
+        print("\n🔬 PRUEBA DE DIMENSIONES INDIVIDUALES")
+        print("─" * 40)
+        
+        # Listar dimensiones disponibles
+        dimensiones_disponibles = []
+        for i in range(1, 13):
+            dim_path = f"dimensiones/dimension_{i}.py"
+            if os.path.exists(dim_path):
+                dimensiones_disponibles.append(i)
+        
+        print(f"Dimensiones encontradas: {dimensiones_disponibles}")
+        
+        if dimensiones_disponibles:
+            try:
+                dim_num = int(input("Ingrese número de dimensión a probar (1-12): "))
+                if 1 <= dim_num <= 12:
+                    modulo_nombre = f"dimensiones.dimension_{dim_num}"
+                    print(f"\nProbando dimensión {dim_num}...")
+                    
+                    # Importar y probar la dimensión
+                    try:
+                        modulo = __import__(modulo_nombre, fromlist=[''])
+                        print(f"✓ Módulo cargado: {modulo.__name__}")
+                        
+                        # Buscar clase principal
+                        for attr_name in dir(modulo):
+                            if 'Dimension' in attr_name or 'DIM' in attr_name.upper():
+                                dim_class = getattr(modulo, attr_name)
+                                if isinstance(dim_class, type):  # Es una clase
+                                    print(f"✓ Clase encontrada: {attr_name}")
+                                    break
+                        
+                    except Exception as e:
+                        print(f"❌ Error al cargar dimensión {dim_num}: {e}")
+                else:
+                    print("❌ Número de dimensión inválido")
+            except ValueError:
+                print("❌ Ingrese un número válido")
+    
+    elif opcion == "4":
+        # Autodiagnóstico
+        print("\n🩺 EJECUTANDO AUTODIAGNÓSTICO...")
+        print("─" * 40)
+        
+        # Verificar archivos esenciales
+        archivos_esenciales = [
+            'vecta_corregido.py',
+            'vecta_self_install.py',
+            'INSTALAR.bat',
+            'core/__init__.py',
+            'core/config_manager.py'
+        ]
+        
+        for archivo in archivos_esenciales:
+            if os.path.exists(archivo):
+                print(f"✓ {archivo}")
+            else:
+                print(f"✗ {archivo} (NO ENCONTRADO)")
+        
+        # Contar archivos de dimensiones
+        contador_dimensiones = 0
+        for i in range(1, 13):
+            if os.path.exists(f"dimensiones/dimension_{i}.py"):
+                contador_dimensiones += 1
+        
+        print(f"\n📁 Archivos de dimensiones: {contador_dimensiones}/12")
+        
+        if contador_dimensiones == 12:
+            print("✅ TODAS las dimensiones están presentes")
+        else:
+            print(f"⚠️ Faltan {12 - contador_dimensiones} dimensiones")
+    
+    elif opcion == "5":
+        # Generar vector aleatorio
+        print("\n🎲 GENERANDO VECTOR 12D ALEATORIO...")
+        
+        if sistema_vectorial:
+            try:
+                # Crear evento de prueba
+                evento_prueba = {
+                    "tipo": "prueba_aleatoria",
+                    "timestamp": datetime.now().isoformat(),
+                    "datos": {
+                        "valor": 42,
+                        "texto": "Vector de prueba",
+                        "aleatorio": True
+                    }
+                }
+                
+                vector = sistema_vectorial.procesar_evento(evento_prueba)
+                
+                print("✅ VECTOR 12D GENERADO:")
+                if hasattr(vector, 'dimensiones'):
+                    for i, dim in enumerate(vector.dimensiones, 1):
+                        print(f"   Dimensión {i:2d}: {type(dim).__name__} = {str(dim)[:50]}...")
+                else:
+                    print(f"   Resultado: {vector}")
+            except Exception as e:
+                print(f"❌ Error generando vector: {e}")
+        else:
+            print("❌ Sistema vectorial no disponible")
+    
+    elif opcion == "7":
+        # Salir
+        print("\n👋 Cerrando sistema VECTA 12D...")
+        return False
+    
+    else:
+        print(f"\n⚠️ Opción '{opcion}' no válida")
+    
+    input("\nPresione Enter para continuar...")
+    return True
+
+def main():
+    """Función principal del lanzador."""
+    
+    # Mostrar banner
+    mostrar_banner()
+    
+    # Inicializar sistema
+    if not inicializar_sistema():
+        print("\n❌ ERROR CRÍTICO: No se puede inicializar el sistema")
+        print("   Verifique la estructura de directorios y archivos.")
+        input("\nPresione Enter para salir...")
+        return 1
+    
+    # Cargar componentes
+    vecta = cargar_nucleo()
+    if not vecta:
+        print("\n❌ ERROR: No se pudo cargar el núcleo VECTA 12D")
+        input("\nPresione Enter para salir...")
+        return 1
+    
+    sistema_vectorial = cargar_sistema_vectorial()
+    
+    print("\n" + "=" * 70)
+    print("✅ SISTEMA VECTA 12D INICIALIZADO CORRECTAMENTE")
+    print("=" * 70)
+    
+    # Bucle principal
+    ejecutando = True
+    while ejecutando:
+        try:
+            mostrar_menu_principal()
+            opcion = input("\nSeleccione una opción (1-6): ").strip()
+            
+            if opcion.lower() in ['exit', 'quit', 'salir']:
+                opcion = "6"
+            
+            ejecutando = procesar_opcion(opcion, vecta, sistema_vectorial)
+            
+        except KeyboardInterrupt:
+            print("\n\n⚠️ Interrupción recibida (Ctrl+C)")
+            confirmar = input("¿Desea salir del sistema? (s/n): ").lower()
+            if confirmar == 's':
+                ejecutando = False
+        except Exception as e:
+            print(f"\n❌ ERROR inesperado: {e}")
+            print("El sistema se reiniciará...")
+            import time
+            time.sleep(2)
+    
+    # Mensaje de despedida
+    print("\n" + "=" * 70)
+    print("VECTA 12D - Sistema cerrado correctamente")
+    print(f"Hora de cierre: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print("=" * 70)
+    
+    return 0
+
+if __name__ == "__main__":
+    try:
+        exit_code = main()
+        sys.exit(exit_code)
+    except Exception as e:
+        print(f"ERROR FATAL: {e}")
+        traceback.print_exc()
+        input("\nPresione Enter para salir...")
+        sys.exit(1)

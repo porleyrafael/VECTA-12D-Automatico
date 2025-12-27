@@ -1,0 +1,2577 @@
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Reporte de Carpeta: C:\Users\Rafael\Desktop\VECTA 12D Automatico</title>
+        <style>
+            body { font-family: Arial, sans-serif; margin: 20px; }
+            .seccion { margin: 20px 0; padding: 15px; border: 1px solid #ddd; }
+            .archivo { margin: 5px 0; padding: 5px; background: #f5f5f5; }
+            .carpeta { margin: 10px 0; padding: 10px; background: #e8f4fc; }
+            .contenido { background: #fff8dc; padding: 10px; margin: 5px 0; font-family: monospace; }
+            .estadisticas { background: #f0f0f0; padding: 15px; }
+        </style>
+    </head>
+    <body>
+        <h1>📁 Reporte de Carpeta</h1>
+        <div class="seccion">
+            <h2>📊 Información General</h2>
+            <p><strong>Ruta:</strong> C:\Users\Rafael\Desktop\VECTA 12D Automatico</p>
+            <p><strong>Fecha de análisis:</strong> 2025-12-25T20:38:33.960278</p>
+        </div>
+        
+        <div class="seccion estadisticas">
+            <h2>📈 Estadísticas</h2>
+            <p>📂 Carpetas: 5</p>
+            <p>📄 Archivos: 61</p>
+            <p>💾 Tamaño total: 0.38 MB</p>
+            
+            <h3>Extensiones de archivo:</h3>
+            <ul>
+    <li>.pyc: 17 archivos</li><li>.py: 35 archivos</li><li>.backup: 1 archivos</li><li>sin_extension: 1 archivos</li><li>.bat: 1 archivos</li><li>.pkg: 1 archivos</li><li>.json: 1 archivos</li><li>.zip: 1 archivos</li><li>.backup_20251225_185345: 1 archivos</li><li>.pydir: 1 archivos</li><li>.pypython: 1 archivos</li>
+            </ul>
+        </div>
+        
+        <div class="seccion">
+            <h2>🌳 Estructura de Carpetas</h2>
+    <div class="carpeta" style="margin-left: 0px;"><strong>📁 core/</strong><div class="archivo" style="margin-left: 20px;">📄 <strong>config_manager.py</strong> (0.14 KB)<div class="contenido"><strong>Contenido (preview):</strong><br>"""
+GESTOR DE CONFIGURACION
+"""
+import json
+
+class ConfigManager:
+    def __init__(self):
+        self.config = {"version": "2.0.0"}</div></div><div class="archivo" style="margin-left: 20px;">📄 <strong>meta_vecta.py</strong> (31.62 KB)<div class="contenido"><strong>Contenido (preview):</strong><br>#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+META-VECTA CORE - Especificación Ejecutable 1.0
+===============================================
+Núcleo filosófico y lógico del sistema VECTA
+Basado en la especificación unificada de Rafael Porley
+"""
+
+import json
+import time
+import math
+from dataclasses import dataclass
+from typing import Dict, List, Any, Tuple, Optional
+from enum import Enum
+import hashlib
+
+# ==================== SECCIÓN 1 - META-VECTA CORE ====================
+
+class VECTAPrinciple(Enum):
+    """Principios inmutables de META-VECTA"""
+    ALWAYS_DECIDE = "P1: ALWAYS_DECIDE"
+    FINITE_TIME_COLLAPSE = "P2: FINITE_TIME_COLLAPSE"
+    NO_COMPLEXITY_WITHOUT_GAIN = "P3: NO_COMPLEXITY_WITHOUT_GAIN"
+    FULL_AUDITABILITY = "P4: FULL_AUDITABILITY"
+    SEPARATION_OF_LAYERS = "P5: SEPARATION_OF_LAYERS"
+
+class MetaVECTA:
+    """Núcleo inmutable de principios META-VECTA"""
+    
+    def __init__(self):
+        self.immutable = True
+        self.creation_time = time.time()
+        self.creator = "Rafael Porley"
+        self.version = "1.0"
+        self.purpose = "Portable definition to teach any IA or PC runtime how VECTA works"
+        
+        # Principios fundamentales
+        self.principles = {
+            VECTAPrinciple.ALWAYS_DECIDE: "No non-execution allowed",
+            VECTAPrinciple.FINITE_TIME_COLLAPSE: "Decisions must resolve in finite time",
+            VECTAPrinciple.NO_COMPLEXITY_WITHOUT_GAIN: "Complexity must be justified",
+            VECTAPrinciple.FULL_AUDITABILITY: "Every change is logged",
+            VECTAPrinciple.SEPARATION_OF_LAYERS: "Language ≠ Intention ≠ Execution"
+        }
+        
+        # Operador Salomón
+        self.operator_salomon = {
+            "description": "Forced decision under undecidable superposition",
+            "rule": "IF (SUPERPOSITION_TIME > T_MAX) THEN SELECT ACTION THAT MINIMIZES IRREVERSIBLE_DAMAGE",
+            "t_max": 5.0  # 5 segundos máximo para decisiones
+        }
+        
+        # Métrica de validez global
+        self.validity_metric = {
+            "requirements": {
+                "delta_information_density": "> 0",
+                "delta_decision_time": "<= 0",
+                "delta_accumulated_error": "<= epsilon"
+            },
+            "epsilon": 0.001,
+            "failure_action": "ROLLBACK_IMMEDIATE"
+        }
+        
+        # Log de auditoría
+        self.audit_log = []
+        self._log_event("META_VECTA_CORE_INITIALIZED", {
+            "timestamp": self.creation_time,
+            "version": self.version,
+            "creator": self.creator
+        })
+    
+    def _log_event(self, event_type: str, data: Dict):
+        """Registro de auditoría inmutable"""
+        event = {
+            "type": event_type,
+            "data": data,
+            "timestamp": time.time(),
+            "hash": hashlib.sha256(str(data).encode()).hexdigest()[:16]
+        }
+        self.audit_log.append(event)
+        return event
+    
+    def apply_operator_salomon(self, superposition_time: float, options: List[Dict]) -> Dict:
+        """Aplica el operador Salomón para decisiones forzadas"""
+        if superposition_time > self.operator_salomon["t_max"]:
+            self._log_event("OPERATOR_SALOMON_APPLIED", {
+                "superposition_time": superposition_time,
+                "t_max": self.operator_salomon["t_max"],
+                "options_count": len(options)
+            })
+            
+            # Seleccionar la opción que minimiza daño irreversible
+            # (simulación - en práctica se usaría una métrica real)
+            if options:
+                return min(options, key=lambda x: x.get('irreversible_damage', 0))
+        
+        return {"decision": "CONTINUE_SUPERPOSITION", "reason": "WITHIN_TIME_LIMIT"}
+    
+    def validate_decision(self, decision_data: Dict) -> Tuple[bool, str]:
+        """Valida una decisión contra la métrica global"""
+        try:
+            # Verificar densidad de información
+            if decision_data.get('information_density', 0) <= 0:
+                return False, "DELTA_INFORMATION_DENSITY <= 0"
+            
+            # Verificar tiempo de decisión
+            if decision_data.get('decision_time', 0) > 0:
+                return False, "DELTA_DECISION_TIME > 0"
+            
+            # Verificar error acumulado
+            epsilon = self.validity_metric["epsilon"]
+            if decision_data.get('accumulated_error', epsilon + 1) > epsilon:
+                return False, f"DELTA_ACCUMULATED_ERROR > {epsilon}"
+            
+            self._log_event("DECISION_VALIDATED", decision_data)
+            return True, "VALID"
+            
+        except Exception as e:
+            return False, f"VALIDATION_ERROR: {str(e)}"
+
+# ==================== SECCIÓN 2 - VECTA LANGUAGE CORE ====================
+
+@dataclass
+class VECTASymbol:
+    """Estructura de símbolo VECTA"""
+    form: str
+    orientation: Tuple[float, float, float]  # (x, y, z)
+    weight: float      # ω - Intensidad/Relevancia
+    phase: floa</div></div><div class="archivo" style="margin-left: 20px;">📄 <strong>vecta_12d_core.py</strong> (1.72 KB)<div class="contenido"><strong>Contenido (preview):</strong><br>"""
+NUCLEO VECTA 12D
+"""
+import sys
+import os
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+try:
+    from dimensiones.vector_12d import SistemaVectorial12D
+    SISTEMA_DISPONIBLE = True
+except:
+    SISTEMA_DISPONIBLE = False
+
+class VECTA_12D_Core:
+    def __init__(self):
+        self.nombre = "VECTA 12D"
+        self.version = "2.0.0"
+        
+        if SISTEMA_DISPONIBLE:
+            self.sistema = SistemaVectorial12D()
+            self.estado = "sistema_cargado"
+        else:
+            self.sistema = None
+            self.estado = "sistema_no_disponible"
+    
+    def procesar(self, texto):
+        if self.sistema:
+            try:
+                vector = self.sistema.procesar_evento({"texto": texto})
+                return {
+                    "exito": True,
+                    "magnitud": vector.magnitud(),
+                    "dimensiones": vector.dimensiones
+                }
+            except Exception as e:
+                return {"exito": False, "error": str(e)}
+        else:
+            return {"exito": False, "error": "Sistema no disponible"}
+    
+    def start_text_interface(self):
+        print("\n=== VECTA 12D ===")
+        print("Escribe 'salir' para terminar\n")
+        
+        while True:
+            try:
+                entrada = input("VECTA> ")
+                if entrada.lower() == 'salir':
+                    break
+                
+                resultado = self.procesar(entrada)
+                if resultado.get("exito"):
+                    print(f"Vector: {resultado['magnitud']:.4f}")
+                else:
+                    print(f"Error: {resultado.get('error')}")
+            except KeyboardInterrupt:
+                break
+</div></div></div><div class="carpeta" style="margin-left: 0px;"><strong>📁 dimensiones/</strong><div class="archivo" style="margin-left: 20px;">📄 <strong>dimension_1.py</strong> (0.31 KB)<div class="contenido"><strong>Contenido (preview):</strong><br>"""
+DIMENSION 1: Tiempo-Entropia
+"""
+
+
+class DimensionTiempoEntropia:
+    def __init__(self):
+        self.nombre = "Tiempo-Entropia"
+        self.magnitud = 0.0
+    
+    def procesar(self, datos):
+        import time
+        return {"dimension": self.nombre, "magnitud": 0.5, "timestamp": time.time()}
+</div></div><div class="archivo" style="margin-left: 20px;">📄 <strong>dimension_10.py</strong> (0.28 KB)<div class="contenido"><strong>Contenido (preview):</strong><br>"""
+DIMENSION 10: Validacion-Correccion
+"""
+
+
+class DimensionValidacionCorreccion:
+    def __init__(self):
+        self.nombre = "Validacion-Correccion"
+        self.magnitud = 0.0
+    
+    def procesar(self, datos):
+        return {"dimension": self.nombre, "magnitud": 0.5}
+</div></div><div class="archivo" style="margin-left: 20px;">📄 <strong>dimension_11.py</strong> (0.27 KB)<div class="contenido"><strong>Contenido (preview):</strong><br>"""
+DIMENSION 11: Conectividad-Red
+"""
+
+
+class DimensionConectividadRed:
+    def __init__(self):
+        self.nombre = "Conectividad-Red"
+        self.magnitud = 0.0
+    
+    def procesar(self, datos):
+        return {"dimension": self.nombre, "magnitud": 0.6}
+</div></div><div class="archivo" style="margin-left: 20px;">📄 <strong>dimension_12.py</strong> (0.28 KB)<div class="contenido"><strong>Contenido (preview):</strong><br>"""
+DIMENSION 12: Meta-Autoprogramacion
+"""
+
+
+class DimensionMetaAutoprogramacion:
+    def __init__(self):
+        self.nombre = "Meta-Autoprogramacion"
+        self.magnitud = 0.0
+    
+    def procesar(self, datos):
+        return {"dimension": self.nombre, "magnitud": 0.1}
+</div></div><div class="archivo" style="margin-left: 20px;">📄 <strong>dimension_2.py</strong> (0.26 KB)<div class="contenido"><strong>Contenido (preview):</strong><br>"""
+DIMENSION 2: Espacio-Volumen
+"""
+
+
+class DimensionEspacioVolumen:
+    def __init__(self):
+        self.nombre = "Espacio-Volumen"
+        self.magnitud = 0.0
+    
+    def procesar(self, datos):
+        return {"dimension": self.nombre, "magnitud": 0.6}
+</div></div><div class="archivo" style="margin-left: 20px;">📄 <strong>dimension_3.py</strong> (0.27 KB)<div class="contenido"><strong>Contenido (preview):</strong><br>"""
+DIMENSION 3: Energia-Potencial
+"""
+
+
+class DimensionEnergiaPotencial:
+    def __init__(self):
+        self.nombre = "Energia-Potencial"
+        self.magnitud = 0.0
+    
+    def procesar(self, datos):
+        return {"dimension": self.nombre, "magnitud": 0.3}
+</div></div><div class="archivo" style="margin-left: 20px;">📄 <strong>dimension_4.py</strong> (0.28 KB)<div class="contenido"><strong>Contenido (preview):</strong><br>"""
+DIMENSION 4: Informacion-Entropia
+"""
+
+
+class DimensionInformacionEntropia:
+    def __init__(self):
+        self.nombre = "Informacion-Entropia"
+        self.magnitud = 0.0
+    
+    def procesar(self, datos):
+        return {"dimension": self.nombre, "magnitud": 0.4}
+</div></div><div class="archivo" style="margin-left: 20px;">📄 <strong>dimension_5.py</strong> (0.27 KB)<div class="contenido"><strong>Contenido (preview):</strong><br>"""
+DIMENSION 5: Conciencia-Atencion
+"""
+
+
+class DimensionConcienciaAtencion:
+    def __init__(self):
+        self.nombre = "Conciencia-Atencion"
+        self.magnitud = 0.0
+    
+    def procesar(self, datos):
+        return {"dimension": self.nombre, "magnitud": 0.2}
+</div></div><div class="archivo" style="margin-left: 20px;">📄 <strong>dimension_6.py</strong> (0.28 KB)<div class="contenido"><strong>Contenido (preview):</strong><br>"""
+DIMENSION 6: Memoria-Persistencia
+"""
+
+
+class DimensionMemoriaPersistencia:
+    def __init__(self):
+        self.nombre = "Memoria-Persistencia"
+        self.magnitud = 0.0
+    
+    def procesar(self, datos):
+        return {"dimension": self.nombre, "magnitud": 0.7}
+</div></div><div class="archivo" style="margin-left: 20px;">📄 <strong>dimension_7.py</strong> (0.28 KB)<div class="contenido"><strong>Contenido (preview):</strong><br>"""
+DIMENSION 7: Aprendizaje-Adaptacion
+"""
+
+
+class DimensionAprendizajeAdaptacion:
+    def __init__(self):
+        self.nombre = "Aprendizaje-Adaptacion"
+        self.magnitud = 0.0
+    
+    def procesar(self, datos):
+        return {"dimension": self.nombre, "magnitud": 0.4}
+</div></div><div class="archivo" style="margin-left: 20px;">📄 <strong>dimension_8.py</strong> (0.28 KB)<div class="contenido"><strong>Contenido (preview):</strong><br>"""
+DIMENSION 8: Creatividad-Generacion
+"""
+
+
+class DimensionCreatividadGeneracion:
+    def __init__(self):
+        self.nombre = "Creatividad-Generacion"
+        self.magnitud = 0.0
+    
+    def procesar(self, datos):
+        return {"dimension": self.nombre, "magnitud": 0.8}
+</div></div><div class="archivo" style="margin-left: 20px;">📄 <strong>dimension_9.py</strong> (0.27 KB)<div class="contenido"><strong>Contenido (preview):</strong><br>"""
+DIMENSION 9: Ejecucion-Accion
+"""
+
+
+class DimensionEjecucionAccion:
+    def __init__(self):
+        self.nombre = "Ejecucion-Accion"
+        self.magnitud = 0.0
+    
+    def procesar(self, datos):
+        return {"dimension": self.nombre, "magnitud": 0.9}
+</div></div><div class="archivo" style="margin-left: 20px;">📄 <strong>vector_12d.py</strong> (3.32 KB)<div class="contenido"><strong>Contenido (preview):</strong><br>"""
+SISTEMA VECTORIAL 12D - VERSIÓN CORREGIDA
+Sistema unificado de 12 dimensiones vectoriales
+"""
+
+import sys
+import os
+import importlib
+
+class Vector12D:
+    def __init__(self, dimensiones):
+        self.dimensiones = dimensiones
+    
+    def magnitud(self):
+        import math
+        suma = sum(d * d for d in self.dimensiones)
+        return math.sqrt(suma) if suma > 0 else 0.0
+    
+    def __str__(self):
+        dims = ", ".join([f"{d:.4f}" for d in self.dimensiones])
+        return f"Vector12D(mag={self.magnitud():.4f}, dims=[{dims}])"
+
+class SistemaVectorial12D:
+    def __init__(self):
+        self.dimensiones = []
+        self._cargar_dimensiones()
+    
+    def _cargar_dimensiones(self):
+        """Carga las 12 dimensiones"""
+        dimensiones_cargadas = 0
+        
+        for i in range(1, 13):
+            try:
+                # Verificar si el archivo existe
+                archivo = f"dimensiones/dimension_{i}.py"
+                if not os.path.exists(archivo):
+                    continue
+                
+                # Importar el módulo
+                modulo_nombre = f"dimensiones.dimension_{i}"
+                modulo = importlib.import_module(modulo_nombre)
+                
+                # Buscar clases en el módulo
+                for nombre in dir(modulo):
+                    obj = getattr(modulo, nombre)
+                    if isinstance(obj, type):
+                        # Crear instancia
+                        instancia = obj()
+                        self.dimensiones.append(instancia)
+                        dimensiones_cargadas += 1
+                        break
+                        
+            except Exception:
+                continue
+        
+        # Si no se cargaron, crear dimensiones simples
+        if dimensiones_cargadas == 0:
+            class DimensionSimple:
+                def __init__(self, idx):
+                    self.idx = idx
+                    self.nombre = f"Dimensión_{idx}"
+                
+                def procesar(self, evento):
+                    return {"magnitud": 0.1 * self.idx, "nombre": self.nombre}
+            
+            for i in range(1, 13):
+                self.dimensiones.append(DimensionSimple(i))
+    
+    def procesar_evento(self, evento):
+        """Procesa un evento a través de todas las dimensiones"""
+        valores = []
+        
+        for i, dim in enumerate(self.dimensiones, 1):
+            try:
+                if hasattr(dim, 'procesar'):
+                    resultado = dim.procesar(evento)
+                    if isinstance(resultado, dict) and 'magnitud' in resultado:
+                        valores.append(float(resultado['magnitud']))
+                    elif isinstance(resultado, (int, float)):
+                        valores.append(float(resultado))
+                    else:
+                        valores.append(0.1 * i)
+                else:
+                    valores.append(0.1 * i)
+            except:
+                valores.append(0.05 * i)
+        
+        # Asegurar 12 valores
+        while len(valores) < 12:
+            valores.append(0.0)
+        
+        if len(valores) > 12:
+            valores = valores[:12]
+        
+        return Vector12D(valores)
+    
+    def obtener_numero_dimensiones(self):
+        return len(self.dimensiones)
+</div></div><div class="archivo" style="margin-left: 20px;">📄 <strong>vector_12d.py.backup</strong> (10.23 KB)</div></div><div class="archivo" style="margin-left: 0px;">📄 <strong>0</strong> (0.00 KB)</div><div class="archivo" style="margin-left: 0px;">📄 <strong>analizar_carpeta.py</strong> (9.37 KB)<div class="contenido"><strong>Contenido (preview):</strong><br>import os
+import json
+import sys
+from pathlib import Path
+from datetime import datetime
+
+def analizar_carpeta(ruta_carpeta, max_contenido_chars=5000):
+    """
+    Analiza una carpeta y genera un reporte estructurado
+    """
+    ruta = Path(ruta_carpeta)
+    
+    if not ruta.exists():
+        return {"error": f"La carpeta no existe: {ruta_carpeta}"}
+    
+    if not ruta.is_dir():
+        return {"error": f"La ruta no es una carpeta: {ruta_carpeta}"}
+    
+    reporte = {
+        "fecha_analisis": datetime.now().isoformat(),
+        "ruta_carpeta": str(ruta.absolute()),
+        "estructura": {},
+        "estadisticas": {
+            "total_archivos": 0,
+            "total_carpetas": 0,
+            "tamano_total_bytes": 0,
+            "extensiones": {}
+        },
+        "contenidos_importantes": {}
+    }
+    
+    # Función recursiva para analizar
+    def analizar_recursivo(directorio, nivel_max=3, nivel_actual=0):
+        if nivel_actual >= nivel_max:
+            return {"_profundidad_maxima": f"Profundidad máxima ({nivel_max}) alcanzada"}
+        
+        estructura = {}
+        
+        try:
+            items = list(directorio.iterdir())
+            for item in sorted(items, key=lambda x: (not x.is_dir(), x.name.lower())):
+                nombre = item.name
+                
+                if item.is_dir():
+                    reporte["estadisticas"]["total_carpetas"] += 1
+                    estructura[nombre] = {
+                        "tipo": "carpeta",
+                        "ruta": str(item.relative_to(ruta)),
+                        "contenido": analizar_recursivo(item, nivel_max, nivel_actual + 1)
+                    }
+                else:
+                    reporte["estadisticas"]["total_archivos"] += 1
+                    
+                    # Obtener extensión
+                    ext = item.suffix.lower() if item.suffix else "sin_extension"
+                    reporte["estadisticas"]["extensiones"][ext] = reporte["estadisticas"]["extensiones"].get(ext, 0) + 1
+                    
+                    # Obtener tamaño
+                    tamano = item.stat().st_size
+                    reporte["estadisticas"]["tamano_total_bytes"] += tamano
+                    
+                    # Leer contenido de archivos de texto pequeños
+                    contenido = ""
+                    if tamano < 100000:  # Archivos menores a 100KB
+                        try:
+                            if ext in ['.txt', '.py', '.js', '.json', '.xml', '.html', '.css', '.md', '.csv', '.log', '.ps1', '.bat', '.cmd', '.ini', '.config', '.inf', '.cfg']:
+                                with open(item, 'r', encoding='utf-8', errors='ignore') as f:
+                                    contenido_preview = f.read(5000)
+                                    if contenido_preview.strip():
+                                        contenido = contenido_preview
+                        except:
+                            contenido = "[No se pudo leer el contenido]"
+                    
+                    estructura[nombre] = {
+                        "tipo": "archivo",
+                        "extension": ext,
+                        "tamano_bytes": tamano,
+                        "tamano_humano": f"{tamano / 1024:.2f} KB" if tamano < 1024*1024 else f"{tamano / (1024*1024):.2f} MB",
+                        "ruta": str(item.relative_to(ruta)),
+                        "contenido_preview": contenido if contenido else None
+                    }
+                    
+        except PermissionError:
+            estructura["_error"] = "Permiso denegado"
+        except Exception as e:
+            estructura["_error"] = str(e)
+        
+        return estructura
+    
+    # Analizar la carpeta principal
+    reporte["estructura"] = analizar_recursivo(ruta)
+    
+    return reporte
+
+def generar_reporte_html(reporte, archivo_salida="reporte_carpeta.html"):
+    """Genera un reporte HTML legible"""
+    html = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Reporte de Carpeta: {reporte['ruta_carpeta']}</title>
+        <style>
+            body {{ font-family: Arial, sans-serif; margin: 20px; }}
+            .seccion {{ margin: 20px 0; padding: 15px; border: 1px solid #ddd; }}
+            .archivo {{ margin: 5px 0; padding: 5px; background: #f5f5f5; }}
+            .carpeta {{ margin: 10px 0; padding: 10px; background: #e8f4fc; }}
+            .contenido {{ background: #fff8dc; padding: 10px; margin: 5px 0; font-family: monospace; }}
+            .estadisticas {{ background: #f0f0f0; padding: 15px; }}
+        </style>
+    </head>
+    <body>
+        <h1>📁 Reporte de Carpeta</h1>
+        <div class="seccion">
+            <h2>📊 Información General</h2>
+            <p><strong>Ruta:</strong> {reporte['ruta_carpeta']}</p>
+            <p><strong>Fecha de análisis:</strong> {reporte['fecha_analisis']}</p>
+        </div>
+        
+        <div class="seccion estadisticas">
+            <h2>📈 Estadísticas</h2>
+            <p</div></div><div class="archivo" style="margin-left: 0px;">📄 <strong>crear_vector.py</strong> (10.83 KB)<div class="contenido"><strong>Contenido (preview):</strong><br># Script para crear vector_12d.py correctamente
+import os
+
+# El código nuevo completo
+codigo_nuevo = '''"""
+SISTEMA VECTORIAL 12D - VERSIÓN CORREGIDA
+Sistema unificado de 12 dimensiones vectoriales
+"""
+import json
+import time
+import importlib
+import sys
+import os
+from typing import List, Dict, Any
+
+# Asegurar que podemos importar desde el directorio actual
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+class Vector12D:
+    """Representa un vector en 12 dimensiones"""
+    def __init__(self, dimensiones: List[float]):
+        self.dimensiones = dimensiones
+        self.timestamp = time.time()
+        
+    def magnitud(self) -> float:
+        """Calcula la magnitud del vector"""
+        import math
+        suma_cuadrados = sum(d * d for d in self.dimensiones)
+        return math.sqrt(suma_cuadrados) if suma_cuadrados > 0 else 0.0
+    
+    def normalizar(self) -> 'Vector12D':
+        """Devuelve una versión normalizada del vector"""
+        mag = self.magnitud()
+        if mag > 0:
+            return Vector12D([d / mag for d in self.dimensiones])
+        return Vector12D([0.0] * 12)
+    
+    def to_dict(self) -> Dict[str, Any]:
+        """Convierte el vector a diccionario"""
+        return {
+            'dimensiones': self.dimensiones,
+            'magnitud': self.magnitud(),
+            'timestamp': self.timestamp,
+            'dimensiones_count': len(self.dimensiones)
+        }
+    
+    def __str__(self) -> str:
+        """Representación en texto del vector"""
+        dim_str = ", ".join([f"{d:.4f}" for d in self.dimensiones])
+        return f"Vector12D(mag={self.magnitud():.4f}, dims=[{dim_str}])"
+
+class SistemaVectorial12D:
+    """Sistema principal que maneja las 12 dimensiones"""
+    
+    def __init__(self):
+        print("[Vector12D] Inicializando sistema vectorial...")
+        self.dimensiones = []
+        self._cargar_dimensiones()
+        print(f"[Vector12D] Sistema inicializado con {len(self.dimensiones)} dimensiones")
+    
+    def _cargar_dimensiones(self):
+        """Carga dinámicamente las 12 dimensiones"""
+        dimensiones_cargadas = 0
+        
+        for i in range(1, 13):
+            try:
+                # Construir el nombre del módulo
+                modulo_nombre = f"dimensiones.dimension_{i}"
+                
+                # Verificar si el archivo existe
+                archivo_dimension = f"dimensiones/dimension_{i}.py"
+                if not os.path.exists(archivo_dimension):
+                    print(f"  [Vector12D] Advertencia: No existe {archivo_dimension}")
+                    continue
+                
+                # Importar el módulo
+                modulo = importlib.import_module(modulo_nombre)
+                
+                # Buscar la clase principal en el módulo
+                clase_dimension = None
+                for nombre_clase in dir(modulo):
+                    # Filtrar nombres que contengan 'Dimension' o 'Dim'
+                    if 'Dimension' in nombre_clase or 'Dim' in nombre_clase:
+                        obj = getattr(modulo, nombre_clase)
+                        if isinstance(obj, type):  # Es una clase
+                            clase_dimension = obj
+                            break
+                
+                if clase_dimension:
+                    # Crear instancia de la dimensión
+                    instancia = clase_dimension()
+                    self.dimensiones.append(instancia)
+                    dimensiones_cargadas += 1
+                    print(f"  [Vector12D] ✓ Dimensión {i} cargada: {clase_dimension.__name__}")
+                else:
+                    print(f"  [Vector12D] ✗ No se encontró clase en dimensión {i}")
+                    
+            except ImportError as e:
+                print(f"  [Vector12D] ✗ Error importando dimensión {i}: {str(e)[:100]}")
+            except Exception as e:
+                print(f"  [Vector12D] ✗ Error cargando dimensión {i}: {str(e)[:100]}")
+        
+        # Si no se cargaron dimensiones, crear dimensiones por defecto
+        if dimensiones_cargadas == 0:
+            print("  [Vector12D] ⚠️ Creando dimensiones por defecto...")
+            self._crear_dimensiones_por_defecto()
+    
+    def _crear_dimensiones_por_defecto(self):
+        """Crea dimensiones básicas por defecto si no se pueden cargar las reales"""
+        class DimensionBase:
+            def __init__(self, nombre, indice):
+                self.nombre = nombre
+                self.indice = indice
+                self.contador = 0
+            
+            def procesar(self, evento):
+                self.contador += 1
+                # Valor simple basado en el índice y longitud del evento
+                valor = 0.1 * self.indice + 0.01 * len(str(evento))
+                return {'magnitud': valor, 'procesado': True, 'dimension': self.indice}
+        
+        nombres = [
+            "Tiempo-Entropía", "Espacio-Volumen", "Energía-Potencial",
+            "Información-Entropía", "Conciencia-Atención", </div></div><div class="archivo" style="margin-left: 0px;">📄 <strong>crear_zip.py</strong> (1.11 KB)<div class="contenido"><strong>Contenido (preview):</strong><br>import zipfile
+import os
+
+# Archivos a incluir en el ZIP
+files = [
+    'INSTALAR.bat',
+    'vecta_self_install.py', 
+    'vecta_12d_launcher.py',
+    'paquete_vecta.pkg'
+]
+
+zip_name = 'VECTA_12D_Automatico.zip'
+
+print("Creando ZIP de VECTA 12D...")
+print("-" * 40)
+
+# Crear archivo ZIP
+with zipfile.ZipFile(zip_name, 'w', zipfile.ZIP_DEFLATED) as zipf:
+    for file in files:
+        if os.path.exists(file):
+            zipf.write(file)
+            print(f'✓ Añadido: {file}')
+        else:
+            print(f'✗ No encontrado: {file}')
+
+# Verificar
+size = os.path.getsize(zip_name)
+print("\n" + "=" * 40)
+print(f'✅ ZIP creado: {zip_name}')
+print(f'📦 Tamaño: {size} bytes = {size/1024/1024:.2f} MB')
+print(f'📍 Ubicación: {os.path.abspath(zip_name)}')
+print("=" * 40)
+print("\n¡Listo! Este ZIP contiene VECTA 12D completo.")
+print("Solo extrae y ejecuta INSTALAR.bat como administrador.")
+
+# Verificar contenido
+print("\nContenido del ZIP:")
+with zipfile.ZipFile(zip_name, 'r') as zipf:
+    for info in zipf.infolist():
+        print(f'  • {info.filename} ({info.file_size} bytes)')</div></div><div class="archivo" style="margin-left: 0px;">📄 <strong>create_vecta_package.py</strong> (5.64 KB)<div class="contenido"><strong>Contenido (preview):</strong><br>"""
+Crea el paquete .pkg con todos los archivos de VECTA 12D
+Versión simplificada para evitar errores de sintaxis
+"""
+import os
+import zipfile
+import json
+
+def create_pkg_file(output_file="paquete_vecta.pkg"):
+    """Crea el archivo .pkg con todos los archivos"""
+    
+    # Archivos esenciales para VECTA 12D
+    package_files = {
+        # Archivos raíz
+        "README.txt": "VECTA 12D - Sistema Autoprogramable de 12 Dimensiones\n\nInstalación: Ejecuta INSTALAR.bat como administrador\nUso: Haz doble clic en VECTA 12D del escritorio",
+        
+        "LICENSE.txt": "LICENCIA VECTA 12D - Software libre para uso personal",
+        
+        "config.json": json.dumps({
+            "version": "12D.1.0.0",
+            "dimensions": 12,
+            "auto_update": True
+        }, indent=2),
+        
+        # Core del sistema
+        "core/__init__.py": "# Paquete core de VECTA 12D\n",
+        
+        "core/vecta_12d_core.py": '''# vecta_12d_core.py - Núcleo principal
+import sys
+import os
+
+class VECTA_12D_Core:
+    def __init__(self):
+        self.mode = "local"
+    
+    def process(self, input_text):
+        return f"VECTA 12D: Procesando '{input_text}' en modo {self.mode}"
+    
+    def start_gui(self):
+        try:
+            from interfaz.vecta_gui_secure import VECTA_GUI
+            import tkinter as tk
+            root = tk.Tk()
+            app = VECTA_GUI(root)
+            root.mainloop()
+        except:
+            print("GUI no disponible, usando consola")
+            self._start_console()
+    
+    def _start_console(self):
+        print("Modo consola 12D activado")
+        while True:
+            cmd = input("12D> ")
+            if cmd.lower() in ['exit', 'quit', 'salir']:
+                break
+            print(self.process(cmd))''',
+        
+        # Interfaz gráfica básica
+        "interfaz/__init__.py": "# Interfaz de usuario\n",
+        
+        "interfaz/vecta_gui_secure.py": '''# vecta_gui_secure.py - GUI principal
+import tkinter as tk
+from tkinter import ttk, scrolledtext
+
+class VECTA_GUI:
+    def __init__(self, root):
+        self.root = root
+        self.setup_gui()
+    
+    def setup_gui(self):
+        self.root.title("VECTA 12D")
+        self.root.geometry("800x600")
+        
+        # Área de chat
+        self.text_area = scrolledtext.ScrolledText(self.root, wrap=tk.WORD)
+        self.text_area.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+        
+        # Entrada
+        self.input_frame = ttk.Frame(self.root)
+        self.input_frame.pack(fill=tk.X, padx=10, pady=5)
+        
+        self.input_var = tk.StringVar()
+        self.input_entry = ttk.Entry(self.input_frame, textvariable=self.input_var)
+        self.input_entry.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(0, 5))
+        
+        self.send_btn = ttk.Button(self.input_frame, text="Enviar", command=self.send_message)
+        self.send_btn.pack(side=tk.RIGHT)
+        
+        self.input_entry.bind("<Return>", lambda e: self.send_message())
+        
+        self.text_area.insert(tk.END, "🌀 VECTA 12D iniciado\\n")
+        self.text_area.insert(tk.END, "Escribe 'hola' para comenzar\\n\\n")
+    
+    def send_message(self):
+        message = self.input_var.get()
+        if message:
+            self.text_area.insert(tk.END, f"Tú: {message}\\n")
+            self.input_var.set("")
+            
+            # Procesar mensaje
+            if message.lower() == 'hola':
+                response = "¡Hola! Soy VECTA 12D, tu sistema autoprogramable"
+            elif '12d' in message.lower():
+                response = "Sistema de 12 Dimensiones Vectoriales activo"
+            else:
+                response = f"Procesando: {message}"
+            
+            self.text_area.insert(tk.END, f"VECTA: {response}\\n\\n")
+            self.text_area.see(tk.END)
+
+def main():
+    root = tk.Tk()
+    app = VECTA_GUI(root)
+    root.mainloop()
+
+if __name__ == "__main__":
+    main()''',
+        
+        # Dimensiones básicas
+        "dimensiones/__init__.py": "# Paquete de dimensiones 12D\n",
+        
+        "dimensiones/d1_temporal.py": "# Dimensión 1: Temporal\\nclass TemporalDimension:\\n    def process(self, data):\\n        return {'dimension': 1}",
+        
+        "dimensiones/d2_espacial.py": "# Dimensión 2: Espacial\\nclass SpatialDimension:\\n    def process(self, data):\\n        return {'dimension': 2}",
+        
+        # Scripts
+        "scripts/__init__.py": "# Scripts auxiliares\n",
+        
+        "scripts/initial_setup.py": '''# initial_setup.py
+import json
+import os
+
+def run_setup():
+    print("Configuración inicial VECTA 12D")
+    os.makedirs("data", exist_ok=True)
+    os.makedirs("logs", exist_ok=True)
+    
+    config = {"setup_complete": True}
+    with open("data/setup.json", 'w') as f:
+        json.dump(config, f, indent=2)
+    
+    print("✅ Configuración completada")
+
+if __name__ == "__main__":
+    run_setup()''',
+        
+        # Datos básicos
+        "data/local_knowledge.json": json.dumps({
+            "greetings": ["Hola",</div></div><div class="archivo" style="margin-left: 0px;">📄 <strong>INSTALAR.bat</strong> (0.42 KB)<div class="contenido"><strong>Contenido (preview):</strong><br>@echo off
+title VECTA 12D - Instalador
+echo ====================================
+echo    VECTA 12D - Sistema 12D
+echo ====================================
+echo.
+echo [1/2] Verificando Python...
+python --version >nul 2>&1
+if errorlevel 1 (
+    echo Error: Python no encontrado
+    echo Instala Python desde python.org
+    pause
+    exit /b 1
+)
+
+echo [2/2] Iniciando VECTA 12D...
+echo.
+python vecta_launcher.py
+pause
+</div></div><div class="archivo" style="margin-left: 0px;">📄 <strong>integrar_meta_vecta.py</strong> (49.23 KB)<div class="contenido"><strong>Contenido (preview):</strong><br>#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+VECTA 12D - SISTEMA DE AUTO-INCORPORACIÓN
+=========================================
+Script automático para integrar la especificación META-VECTA 1.0
+Sigue los principios VECTA: auto-contenido, auto-verificación, auto-reparación
+"""
+
+import os
+import sys
+import shutil
+import time
+import hashlib
+import json
+from datetime import datetime
+
+print("\n" + "="*80)
+print("⚡ VECTA 12D - AUTO-INCORPORACIÓN META-VECTA 1.0")
+print("="*80)
+print(f"📅 Fecha: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+print(f"📁 Directorio: {os.getcwd()}")
+print("="*80)
+
+# ==================== FUNCIONES DE AUTO-VERIFICACIÓN ====================
+
+def verificar_estructura():
+    """Verifica la estructura básica del proyecto"""
+    print("\n[1/8] 🔍 VERIFICANDO ESTRUCTURA DEL PROYECTO...")
+    
+    requeridos = {
+        'core/': 'Directorio del núcleo',
+        'dimensiones/': 'Directorio de dimensiones',
+        'vecta_launcher.py': 'Lanzador principal',
+        'core/vecta_12d_core.py': 'Núcleo VECTA 12D',
+        'dimensiones/vector_12d.py': 'Sistema vectorial 12D'
+    }
+    
+    faltantes = []
+    for ruta, descripcion in requeridos.items():
+        if os.path.exists(ruta):
+            print(f"  ✓ {ruta:30} {descripcion}")
+        else:
+            print(f"  ✗ {ruta:30} {descripcion} - NO ENCONTRADO")
+            faltantes.append(ruta)
+    
+    if faltantes:
+        print(f"\n⚠️  ADVERTENCIA: Faltan {len(faltantes)} elementos críticos")
+        return False
+    else:
+        print("  ✅ Estructura verificada correctamente")
+        return True
+
+def crear_backup(ruta_archivo):
+    """Crea un backup de un archivo con timestamp"""
+    if os.path.exists(ruta_archivo):
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        backup_ruta = f"{ruta_archivo}.backup_{timestamp}"
+        try:
+            shutil.copy2(ruta_archivo, backup_ruta)
+            return backup_ruta
+        except:
+            return None
+    return None
+
+def calcular_hash(contenido):
+    """Calcula el hash MD5 de un contenido"""
+    return hashlib.md5(contenido.encode('utf-8')).hexdigest()
+
+# ==================== INCORPORACIÓN META-VECTA ====================
+
+def incorporar_meta_vecta():
+    """Incorpora el sistema META-VECTA al proyecto"""
+    print("\n[2/8] 🚀 INCORPORANDO ESPECIFICACIÓN META-VECTA...")
+    
+    # Código completo del sistema META-VECTA
+    META_VECTA_CODE = '''#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+META-VECTA CORE - Especificación Ejecutable 1.0
+===============================================
+Núcleo filosófico y lógico del sistema VECTA
+Basado en la especificación unificada de Rafael Porley
+"""
+
+import json
+import time
+import math
+from dataclasses import dataclass
+from typing import Dict, List, Any, Tuple, Optional
+from enum import Enum
+import hashlib
+
+# ==================== SECCIÓN 1 - META-VECTA CORE ====================
+
+class VECTAPrinciple(Enum):
+    """Principios inmutables de META-VECTA"""
+    ALWAYS_DECIDE = "P1: ALWAYS_DECIDE"
+    FINITE_TIME_COLLAPSE = "P2: FINITE_TIME_COLLAPSE"
+    NO_COMPLEXITY_WITHOUT_GAIN = "P3: NO_COMPLEXITY_WITHOUT_GAIN"
+    FULL_AUDITABILITY = "P4: FULL_AUDITABILITY"
+    SEPARATION_OF_LAYERS = "P5: SEPARATION_OF_LAYERS"
+
+class MetaVECTA:
+    """Núcleo inmutable de principios META-VECTA"""
+    
+    def __init__(self):
+        self.immutable = True
+        self.creation_time = time.time()
+        self.creator = "Rafael Porley"
+        self.version = "1.0"
+        self.purpose = "Portable definition to teach any IA or PC runtime how VECTA works"
+        
+        # Principios fundamentales
+        self.principles = {
+            VECTAPrinciple.ALWAYS_DECIDE: "No non-execution allowed",
+            VECTAPrinciple.FINITE_TIME_COLLAPSE: "Decisions must resolve in finite time",
+            VECTAPrinciple.NO_COMPLEXITY_WITHOUT_GAIN: "Complexity must be justified",
+            VECTAPrinciple.FULL_AUDITABILITY: "Every change is logged",
+            VECTAPrinciple.SEPARATION_OF_LAYERS: "Language ≠ Intention ≠ Execution"
+        }
+        
+        # Operador Salomón
+        self.operator_salomon = {
+            "description": "Forced decision under undecidable superposition",
+            "rule": "IF (SUPERPOSITION_TIME > T_MAX) THEN SELECT ACTION THAT MINIMIZES IRREVERSIBLE_DAMAGE",
+            "t_max": 5.0  # 5 segundos máximo para decisiones
+        }
+        
+        # Métrica de validez global
+        self.validity_metric = {
+            "requirements": {
+                "delta_information_density": "> 0",
+                "delta_decision_time": "<= 0",
+                "delta_accumulated_error": "<= epsilon"
+            },
+            "epsilon": 0.001,
+            "failure_action": "ROLLBACK_IMMEDIATE"
+        }
+        
+        # Log de auditoría
+        self.audit_log = []
+        self._log_event("META_VECTA_CORE_INITIALIZED", {
+            "timestamp": self.creation_time,
+            "version": self.version,
+            "creator": self.creator
+        </div></div><div class="archivo" style="margin-left: 0px;">📄 <strong>paquete_vecta.pkg</strong> (5.80 KB)</div><div class="archivo" style="margin-left: 0px;">📄 <strong>prueba_vecta.py</strong> (0.44 KB)<div class="contenido"><strong>Contenido (preview):</strong><br>import sys 
+import os 
+sys.path.insert(0, ".") 
+print("Probando VECTA 12D...") 
+try: 
+    from core.vecta_12d_core import VECTA_12D_Core 
+    v = VECTA_12D_Core() 
+    print("? Sistema cargado") 
+    res = v.procesar("Hola mundo") 
+    if res["exito"]: 
+        print(f"? Vector creado - Magnitud: {res['magnitud']:.4f}") 
+    else: 
+        print(f"? Error: {res.get('error')}") 
+except Exception as e: 
+    print(f"? Error: {e}") 
+</div></div><div class="archivo" style="margin-left: 0px;">📄 <strong>python fix_simple.py</strong> (0.44 KB)<div class="contenido"><strong>Contenido (preview):</strong><br>python -c "
+with open('vecta_launcher.py', 'r', encoding='utf-8') as f:
+    contenido = f.read()
+    
+if 'elif opcion == \"7\":' in contenido and 'Salir' in contenido:
+    print('OK: Opcion 7 es Salir')
+else:
+    print('ERROR: No se encontro opcion 7 para Salir')
+    
+if 'opcion == \"6\"' in contenido and 'META-VECTA' in contenido:
+    print('OK: Opcion 6 es META-VECTA')
+else:
+    print('ADVERTENCIA: Opcion 6 puede no ser META-VECTA')
+"</div></div><div class="archivo" style="margin-left: 0px;">📄 <strong>registro_incorporacion.json</strong> (0.29 KB)<div class="contenido"><strong>Contenido (preview):</strong><br>{
+  "fecha": "2025-12-25T18:53:47.185366",
+  "version": "1.0",
+  "especificacion": "META-VECTA",
+  "archivos_creados": [
+    "core/meta_vecta.py"
+  ],
+  "archivos_modificados": [
+    "vecta_launcher.py"
+  ],
+  "hash_sistema": "c45d7b1a7f82a90363d9f205f65d43c5",
+  "estado": "INCORPORADO"
+}</div></div><div class="archivo" style="margin-left: 0px;">📄 <strong>reparar_menu.py</strong> (9.29 KB)<div class="contenido"><strong>Contenido (preview):</strong><br>#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+VECTA 12D - AUTO-REPARACIÓN DE MENÚ
+Script automático para corregir el error de sintaxis en el menú
+"""
+
+import os
+import sys
+import time
+
+print("\n" + "="*70)
+print("🔧 VECTA 12D - AUTO-REPARACIÓN DE MENÚ")
+print("="*70)
+
+def reparar_menu_lanzador():
+    """Repara el error de sintaxis en vecta_launcher.py"""
+    
+    archivo = "vecta_launcher.py"
+    
+    if not os.path.exists(archivo):
+        print(f"❌ Archivo no encontrado: {archivo}")
+        return False
+    
+    print(f"📖 Leyendo {archivo}...")
+    
+    try:
+        with open(archivo, 'r', encoding='utf-8') as f:
+            lineas = f.readlines()
+        
+        print(f"✅ Leídas {len(lineas)} líneas")
+        
+        # Buscar el menú problemático
+        menu_encontrado = False
+        lineas_reparadas = []
+        
+        for i, linea in enumerate(lineas):
+            if "6. Sistema META-VECTA (Nuevo)" in linea and not linea.strip().startswith("print"):
+                print(f"⚠️  Línea {i+1} con error: {linea.strip()}")
+                # Corregir la línea - agregar print
+                linea_corregida = '    print("6. Sistema META-VECTA (Nuevo)")\n'
+                lineas_reparadas.append(linea_corregida)
+                menu_encontrado = True
+                print(f"✅ Línea corregida: {linea_corregida.strip()}")
+            elif "7. Salir del sistema" in linea and not linea.strip().startswith("print"):
+                print(f"⚠️  Línea {i+1} con error: {linea.strip()}")
+                # Corregir la línea - agregar print
+                linea_corregida = '    print("7. Salir del sistema")\n'
+                lineas_reparadas.append(linea_corregida)
+                print(f"✅ Línea corregida: {linea_corregida.strip()}")
+            else:
+                lineas_reparadas.append(linea)
+        
+        if not menu_encontrado:
+            # Intentar otro método: buscar la función mostrar_menu_principal
+            print("🔍 Buscando función mostrar_menu_principal...")
+            
+            # Unir las líneas para buscar mejor
+            contenido = ''.join(lineas)
+            
+            # Definir el menú corregido
+            menu_corregido = '''def mostrar_menu_principal():
+    """Muestra el menú principal de opciones."""
+    print("\\n" + "═" * 70)
+    print("MENÚ PRINCIPAL - VECTA 12D")
+    print("═" * 70)
+    print("1. Procesar texto/comando")
+    print("2. Ver estado del sistema")
+    print("3. Probar dimensiones individuales")
+    print("4. Ejecutar autodiagnóstico")
+    print("5. Generar vector 12D aleatorio")
+    print("6. Sistema META-VECTA (Nuevo)")
+    print("7. Salir del sistema")
+    print("═" * 70)
+'''
+            
+            # Reemplazar la función completa
+            if 'def mostrar_menu_principal():' in contenido:
+                # Encontrar inicio y fin de la función
+                inicio = contenido.find('def mostrar_menu_principal():')
+                # Buscar el próximo def o return
+                fin = contenido.find('\ndef ', inicio + 1)
+                if fin == -1:
+                    fin = len(contenido)
+                
+                # Crear nuevo contenido
+                nuevo_contenido = contenido[:inicio] + menu_corregido + contenido[fin:]
+                lineas_reparadas = nuevo_contenido.splitlines(keepends=True)
+                print("✅ Función mostrar_menu_principal reemplazada completamente")
+            else:
+                print("❌ No se encontró la función del menú")
+                return False
+        
+        # Escribir el archivo reparado
+        with open(archivo, 'w', encoding='utf-8') as f:
+            f.writelines(lineas_reparadas)
+        
+        print(f"✅ Archivo reparado: {archivo}")
+        print(f"📏 Nuevo tamaño: {os.path.getsize(archivo)} bytes")
+        
+        return True
+        
+    except Exception as e:
+        print(f"❌ Error al reparar: {e}")
+        return False
+
+def verificar_reparacion():
+    """Verifica que la reparación fue exitosa"""
+    
+    archivo = "vecta_launcher.py"
+    
+    try:
+        # Verificar sintaxis Python
+        print("\n🔍 Verificando sintaxis Python...")
+        import ast
+        with open(archivo, 'r', encoding='utf-8') as f:
+            contenido = f.read()
+        ast.parse(contenido)  # Esto lanza SyntaxError si hay error
+        print("✅ Sintaxis Python válida")
+        
+        # Verificar que el menú esté correcto
+        if 'print("6. Sistema META-VECTA (Nuevo)")' in contenido:
+            print("✅ Menú META-VECTA presente")
+        else:
+            print("⚠️  Menú META-VECTA no encontrado")
+        
+        # Verificar que no haya líneas problemáticas
+        lineas_problematicas = []
+        for i, linea in enumerate(contenido.split('\n'), 1):
+            if "6. Sistema META-VECTA (Nuevo)" in linea and not linea.strip().startswith("print"):
+                lineas_problematicas.append(i)
+            if "7. Salir del sistema" in linea and not linea.strip().startswith("print"):
+                </div></div><div class="archivo" style="margin-left: 0px;">📄 <strong>reparar_opcion6.py</strong> (14.36 KB)<div class="contenido"><strong>Contenido (preview):</strong><br>#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+VECTA 12D - REPARACIÓN DE OPCIÓN 6 (META-VECTA)
+Corrige el procesamiento de la opción 6 en el lanzador
+"""
+
+import os
+import sys
+
+print("\n" + "="*70)
+print("🔧 VECTA 12D - REPARACIÓN DE OPCIÓN 6 (META-VECTA)")
+print("="*70)
+
+def reparar_opcion6():
+    """Repara específicamente la opción 6 del lanzador"""
+    
+    archivo = "vecta_launcher.py"
+    
+    if not os.path.exists(archivo):
+        print(f"❌ Archivo no encontrado: {archivo}")
+        return False
+    
+    print(f"📖 Leyendo {archivo}...")
+    
+    try:
+        with open(archivo, 'r', encoding='utf-8') as f:
+            contenido = f.read()
+        
+        print(f"✅ Leídas {len(contenido)} caracteres")
+        
+        # Buscar la función procesar_opcion
+        if 'def procesar_opcion(' not in contenido:
+            print("❌ No se encontró la función procesar_opcion")
+            return False
+        
+        # Extraer la función completa
+        inicio = contenido.find('def procesar_opcion(')
+        # Encontrar el final de la función (próxima función o fin)
+        funciones = ['\ndef ', '\nclass ', '\nasync def ']
+        fin = len(contenido)
+        for func in funciones:
+            idx = contenido.find(func, inicio + 1)
+            if idx != -1 and idx < fin:
+                fin = idx
+        
+        funcion_completa = contenido[inicio:fin]
+        
+        print("🔍 Analizando función procesar_opcion...")
+        
+        # Verificar si ya tiene la opción 6 correcta
+        if 'opcion == "6"' in funcion_completa and 'Sistema META-VECTA' in funcion_completa:
+            print("✅ La opción 6 ya está configurada para META-VECTA")
+            return True
+        
+        # Buscar y reemplazar la opción 6 actual (que debe ser la de salir)
+        if 'opcion == "6"' in funcion_completa:
+            print("⚠️  Opción 6 actualmente configurada para salir, cambiando a META-VECTA...")
+            
+            # Código para la opción 6 (META-VECTA)
+            codigo_opcion6 = '''    elif opcion == "6":
+        # Sistema META-VECTA
+        print("\\n" + "="*70)
+        print("🚀 SISTEMA META-VECTA - Especificación 1.0")
+        print("="*70)
+        
+        try:
+            from core.meta_vecta import VECTASystem, test_vecta_system
+            
+            print("\\nOpciones META-VECTA:")
+            print("  1. Ejecutar prueba completa")
+            print("  2. Procesar intención personalizada")
+            print("  3. Ver estado del sistema META-VECTA")
+            print("  4. Volver al menú principal")
+            
+            sub_opcion = input("\\nSeleccione opción (1-4): ").strip()
+            
+            if sub_opcion == "1":
+                print("\\n🧪 Ejecutando prueba META-VECTA...")
+                test_vecta_system()
+                
+            elif sub_opcion == "2":
+                print("\\n" + "-"*50)
+                print("PROCESADOR DE INTENCIONES META-VECTA")
+                print("-"*50)
+                
+                texto = input("Intención: ").strip()
+                if not texto:
+                    print("❌ Intención vacía")
+                else:
+                    vecta = VECTASystem()
+                    resultado = vecta.process_intention(
+                        texto,
+                        context={"domain": "LONG_TERM_PLANNING"},
+                        auth_key="RAFAEL_PORLEY_VECTA"
+                    )
+                    
+                    if resultado.get("success"):
+                        print(f"\\n✅ Decisión: {resultado['decision']['action']}")
+                        print(f"📊 Probabilidad: {resultado['decision']['probability']:.1%}")
+                        print(f"🔍 Interpretación: {resultado['field_interpretation']}")
+                    else:
+                        print(f"\\n❌ Error: {resultado.get('error')}")
+                        
+            elif sub_opcion == "3":
+                vecta = VECTASystem()
+                estado = vecta.get_system_status()
+                
+                print(f"\\n📊 ESTADO META-VECTA:")
+                print(f"  • Versión: {estado['meta']['version']}")
+                print(f"  • Creador: {estado['meta']['creator']}")
+                print(f"  • Principios: {estado['meta']['principles_count']}")
+                print(f"  • Símbolos: {estado['language']['base_symbols']} base")
+                print(f"  • Ciclos: {estado['runtime']['cycles_executed']}")
+                print(f"  • Dominios: {', '.join(estado['safety']['authorized_domains'])}")
+                
+            else:
+                print("Volviendo al menú principal...")
+                
+        except ImportError as e:
+            print(f"❌ Error: {e}")
+            print("  Asegúrate de que core/meta_vecta.py existe")
+        except Exception as e:
+            print(f"❌ Error inesperado: {e}")
+        
+        input("\\nPresione Enter para continuar...")
+        return True'''
+        
+            # Encontrar y reemplazar el bloque de la opción 6 act</div></div><div class="archivo" style="margin-left: 0px;">📄 <strong>reparar_vecta.py</strong> (10.39 KB)<div class="contenido"><strong>Contenido (preview):</strong><br>"""
+VECTA 12D - SISTEMA DE REPARACIÓN AUTOMÁTICA
+Script único para diagnosticar y reparar todo el sistema
+"""
+
+import os
+import sys
+import time
+import shutil
+
+print("\n" + "="*70)
+print("🚀 VECTA 12D - REPARACIÓN AUTOMÁTICA")
+print("="*70)
+print(f"Hora de inicio: {time.strftime('%H:%M:%S')}")
+print(f"Directorio: {os.getcwd()}")
+print("="*70)
+
+# ======================= PASO 1: DIAGNÓSTICO =======================
+print("\n[1/5] 🔍 EJECUTANDO DIAGNÓSTICO COMPLETO...")
+
+problemas = []
+advertencias = []
+
+# 1. Verificar directorios
+print("\n  📁 Verificando estructura...")
+if os.path.exists("core"):
+    print("    ✓ Directorio 'core' encontrado")
+else:
+    print("    ✗ Directorio 'core' NO encontrado")
+    problemas.append("Falta directorio 'core'")
+
+if os.path.exists("dimensiones"):
+    print("    ✓ Directorio 'dimensiones' encontrado")
+else:
+    print("    ✗ Directorio 'dimensiones' NO encontrado")
+    problemas.append("Falta directorio 'dimensiones'")
+
+# 2. Verificar archivos críticos
+print("\n  📄 Verificando archivos críticos...")
+archivos_criticos = [
+    ("core/vecta_12d_core.py", "Archivo principal del núcleo"),
+    ("core/__init__.py", "Paquete del núcleo"),
+    ("dimensiones/vector_12d.py", "Sistema vectorial 12D"),
+    ("vecta_launcher.py", "Lanzador principal")
+]
+
+for archivo, descripcion in archivos_criticos:
+    if os.path.exists(archivo):
+        tamaño = os.path.getsize(archivo)
+        if tamaño > 100:
+            print(f"    ✓ {archivo} ({tamaño} bytes)")
+        else:
+            print(f"    ⚠️  {archivo} muy pequeño ({tamaño} bytes)")
+            advertencias.append(f"{archivo} tiene solo {tamaño} bytes")
+    else:
+        print(f"    ✗ {archivo} NO encontrado")
+        problemas.append(f"Falta {descripcion}")
+
+# 3. Contar dimensiones
+print("\n  📊 Contando dimensiones...")
+dimensiones_encontradas = 0
+for i in range(1, 13):
+    archivo = f"dimensiones/dimension_{i}.py"
+    if os.path.exists(archivo):
+        dimensiones_encontradas += 1
+
+print(f"    ✓ Archivos de dimensiones: {dimensiones_encontradas}/12")
+
+if dimensiones_encontradas < 12:
+    advertencias.append(f"Solo {dimensiones_encontradas} de 12 dimensiones encontradas")
+
+# 4. Verificar Python
+print("\n  🐍 Verificando Python...")
+try:
+    version = sys.version.split()[0]
+    print(f"    ✓ Python {version} detectado")
+except:
+    print("    ⚠️  No se pudo verificar Python")
+
+# Mostrar resumen de diagnóstico
+print("\n" + "-"*70)
+print("📋 RESUMEN DE DIAGNÓSTICO")
+print("-"*70)
+
+if problemas:
+    print("🚨 PROBLEMAS CRÍTICOS:")
+    for p in problemas:
+        print(f"  ✗ {p}")
+else:
+    print("✅ No hay problemas críticos")
+
+if advertencias:
+    print("\n⚠️  ADVERTENCIAS:")
+    for a in advertencias:
+        print(f"  ! {a}")
+else:
+    print("✅ No hay advertencias")
+
+print("-"*70)
+
+# ======================= PASO 2: REPARAR VECTOR_12D.PY =======================
+print("\n[2/5] 🛠️  REPARANDO vector_12d.py...")
+
+# Primero hacer backup si existe
+archivo_vector = "dimensiones/vector_12d.py"
+if os.path.exists(archivo_vector):
+    try:
+        shutil.copy2(archivo_vector, "dimensiones/vector_12d.py.backup")
+        print("  ✓ Backup creado: vector_12d.py.backup")
+    except:
+        print("  ⚠️  No se pudo hacer backup")
+
+# Crear nuevo vector_12d.py corregido
+codigo_corregido = '''"""
+SISTEMA VECTORIAL 12D - VERSIÓN CORREGIDA
+Sistema unificado de 12 dimensiones vectoriales
+"""
+
+import sys
+import os
+import importlib
+
+class Vector12D:
+    def __init__(self, dimensiones):
+        self.dimensiones = dimensiones
+    
+    def magnitud(self):
+        import math
+        suma = sum(d * d for d in self.dimensiones)
+        return math.sqrt(suma) if suma > 0 else 0.0
+    
+    def __str__(self):
+        dims = ", ".join([f"{d:.4f}" for d in self.dimensiones])
+        return f"Vector12D(mag={self.magnitud():.4f}, dims=[{dims}])"
+
+class SistemaVectorial12D:
+    def __init__(self):
+        self.dimensiones = []
+        self._cargar_dimensiones()
+    
+    def _cargar_dimensiones(self):
+        """Carga las 12 dimensiones"""
+        dimensiones_cargadas = 0
+        
+        for i in range(1, 13):
+            try:
+                # Verificar si el archivo existe
+                archivo = f"dimensiones/dimension_{i}.py"
+                if not os.path.exists(archivo):
+                    continue
+                
+                # Importar el módulo
+                modulo_nombre = f"dimensiones.dimension_{i}"
+                modulo = importlib.import_module(modulo_nombre)
+                
+                # Buscar clases en el módulo
+                for nombre in dir(modulo):
+                    obj = getattr(modulo, nombre)
+                    if isinstance(obj, type):
+                        # Crear instancia
+                        instancia = obj()
+                        self.dimensiones.append(instancia)
+                        dimensiones_cargadas += 1
+                        break
+                        
+            except Exception:
+                continue
+        </div></div><div class="archivo" style="margin-left: 0px;">📄 <strong>VECTA_12D_Automatico.zip</strong> (10.59 KB)</div><div class="archivo" style="margin-left: 0px;">📄 <strong>vecta_12d_launcher.py</strong> (4.40 KB)<div class="contenido"><strong>Contenido (preview):</strong><br>#!/usr/bin/env python3
+"""
+VECTA 12D - LANZADOR PRINCIPAL
+Sistema de 12 Dimensiones Vectoriales
+Versión: 2.0.0
+"""
+import sys
+import os
+from pathlib import Path
+
+def main():
+    print("\n" + "="*60)
+    print("🚀 VECTA 12D - SISTEMA DE 12 DIMENSIONES")
+    print("="*60)
+    print("Versión: 2.0.0")
+    print("Modo: Sistema Vectorial Autoprogramable")
+    print("="*60)
+    
+    # Asegurarnos de que estamos en el directorio correcto
+    base_dir = Path(__file__).parent
+    os.chdir(base_dir)
+    
+    # Añadir directorios al path
+    sys.path.insert(0, str(base_dir))
+    if (base_dir / "dimensiones").exists():
+        sys.path.insert(0, str(base_dir / "dimensiones"))
+    if (base_dir / "core").exists():
+        sys.path.insert(0, str(base_dir / "core"))
+    
+    try:
+        # Intentar cargar el núcleo de VECTA
+        print("\n📦 Cargando sistema VECTA 12D...")
+        
+        # Primero verificar si existen los archivos necesarios
+        if not (base_dir / "core" / "vecta_12d_core.py").exists():
+            print("❌ Error: No se encontró el núcleo de VECTA")
+            print("   Asegúrate de que 'core/vecta_12d_core.py' existe")
+            input("\nPresiona Enter para salir...")
+            return
+        
+        # Importar el núcleo
+        from core.vecta_12d_core import VECTA_12D_Core
+        
+        print("✅ Sistema cargado exitosamente")
+        print("✅ 12 dimensiones vectoriales activas")
+        
+        # Crear instancia
+        vecta = VECTA_12D_Core()
+        
+        # Verificar modo de ejecución
+        if len(sys.argv) > 1:
+            if sys.argv[1] == "--gui":
+                print("\n🎨 Iniciando interfaz gráfica...")
+                vecta.start_gui()
+            elif sys.argv[1] == "--help" or sys.argv[1] == "-h":
+                mostrar_ayuda()
+            else:
+                print(f"\n⚠️  Opción desconocida: {sys.argv[1]}")
+                mostrar_ayuda()
+        else:
+            # Modo por defecto: interfaz de texto
+            print("\n💻 Iniciando en modo consola...")
+            print("   Escribe 'salir' para terminar")
+            print("   Escribe 'estado' para ver información del sistema")
+            print("   Escribe 'ayuda' para ver comandos disponibles")
+            print("-" * 40)
+            vecta.start_text_interface()
+            
+    except ImportError as e:
+        print(f"❌ Error importando módulos: {e}")
+        print("\n📋 Solución:")
+        print("1. Ejecuta primero: python vecta_corregido.py")
+        print("2. O verifica que los directorios 'core/' y 'dimensiones/' existen")
+        
+        # Mostrar estructura actual
+        print("\n📁 Estructura actual:")
+        for item in base_dir.iterdir():
+            if item.is_dir():
+                print(f"  📁 {item.name}/")
+            else:
+                print(f"  📄 {item.name}")
+        
+        input("\nPresiona Enter para salir...")
+        
+    except Exception as e:
+        print(f"❌ Error inesperado: {e}")
+        import traceback
+        traceback.print_exc()
+        input("\nPresiona Enter para salir...")
+
+def mostrar_ayuda():
+    """Muestra la ayuda del sistema"""
+    print("\n📖 AYUDA VECTA 12D:")
+    print("="*40)
+    print("Uso: python vecta_launcher.py [OPCIÓN]")
+    print("\nOpciones:")
+    print("  --gui       Inicia interfaz gráfica")
+    print("  --help      Muestra esta ayuda")
+    print("  --version   Muestra la versión")
+    print("\nSin opciones: Inicia en modo consola")
+    print("\nComandos en modo consola:")
+    print("  salir       Termina el programa")
+    print("  estado      Muestra información del sistema")
+    print("  ayuda       Muestra comandos disponibles")
+    print("="*40)
+
+def mostrar_version():
+    """Muestra la versión del sistema"""
+    print("\n📊 VERSIÓN VECTA 12D:")
+    print("="*40)
+    print("Sistema: VECTA 12D")
+    print("Versión: 2.0.0")
+    print("Estado: Sistema de 12 Dimensiones Vectoriales")
+    print("Autor: Sistema Autoprogramable VECTA")
+    print("="*40)
+
+if __name__ == "__main__":
+    # Verificar si se solicita ayuda o versión
+    if len(sys.argv) > 1:
+        if sys.argv[1] == "--version" or sys.argv[1] == "-v":
+            mostrar_version()
+            sys.exit(0)
+        elif sys.argv[1] == "--help" or sys.argv[1] == "-h":
+            mostrar_ayuda()
+            sys.exit(0)
+    
+    main()</div></div><div class="archivo" style="margin-left: 0px;">📄 <strong>vecta_auto_build.py</strong> (45.74 KB)<div class="contenido"><strong>Contenido (preview):</strong><br>#!/usr/bin/env python3
+"""
+VECTA 12D - SISTEMA AUTOMÁTICO COMPLETO
+========================================
+Este script único realiza todas las tareas automáticamente:
+1. Verifica entorno y dependencias
+2. Crea sistema de 12 dimensiones
+3. Genera paquete .pkg
+4. Crea ZIP de distribución
+5. Ejecuta autodiagnóstico
+
+INSTRUCCIONES:
+1. Guarda este archivo en: C:\Users\Rafael\Desktop\VECTA 12D Automatico\
+2. Ejecuta: python vecta_auto_build.py
+3. Si hay errores, COPIA Y PEGA TODO EL OUTPUT en el chat
+"""
+
+import os
+import sys
+import json
+import zipfile
+import shutil
+import time
+import subprocess
+import tempfile
+import importlib.util
+from pathlib import Path
+from datetime import datetime
+from typing import Dict, List, Any, Tuple
+import traceback
+
+# ============================================================================
+# CONFIGURACIÓN Y CONSTANTES
+# ============================================================================
+class Config:
+    VERSION = "2.0.0"
+    BUILD_DATE = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    PROJECT_DIR = Path.cwd()
+    DIMENSIONES_DIR = PROJECT_DIR / "dimensiones"
+    CORE_DIR = PROJECT_DIR / "core"
+    PAQUETE_PKG = "paquete_vecta.pkg"
+    ZIP_FINAL = "VECTA_12D_Automatico.zip"
+    
+    ARCHIVOS_REQUERIDOS = [
+        "INSTALAR.bat",
+        "vecta_self_install.py", 
+        "vecta_12d_launcher.py",
+        "paquete_vecta.pkg"
+    ]
+
+# ============================================================================
+# SISTEMA DE LOGGING Y AUTODIAGNÓSTICO
+# ============================================================================
+class AutoDiagnostico:
+    def __init__(self):
+        self.errores = []
+        self.advertencias = []
+        self.exitos = []
+        self.start_time = time.time()
+    
+    def registrar_error(self, modulo: str, error: str, detalles: str = ""):
+        registro = {
+            "modulo": modulo,
+            "error": str(error),
+            "detalles": detalles,
+            "timestamp": time.time()
+        }
+        self.errores.append(registro)
+        print(f"❌ ERROR en {modulo}: {error}")
+        if detalles:
+            print(f"   Detalles: {detalles}")
+    
+    def registrar_exito(self, modulo: str, mensaje: str):
+        registro = {
+            "modulo": modulo,
+            "mensaje": mensaje,
+            "timestamp": time.time()
+        }
+        self.exitos.append(registro)
+        print(f"✅ {modulo}: {mensaje}")
+    
+    def registrar_advertencia(self, modulo: str, mensaje: str):
+        registro = {
+            "modulo": modulo,
+            "mensaje": mensaje,
+            "timestamp": time.time()
+        }
+        self.advertencias.append(registro)
+        print(f"⚠️  {modulo}: {mensaje}")
+    
+    def generar_reporte(self) -> str:
+        tiempo_total = time.time() - self.start_time
+        
+        reporte = []
+        reporte.append("=" * 80)
+        reporte.append("📋 INFORME DE AUTODIAGNÓSTICO VECTA 12D")
+        reporte.append("=" * 80)
+        reporte.append(f"Fecha: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        reporte.append(f"Versión: {Config.VERSION}")
+        reporte.append(f"Tiempo total: {tiempo_total:.2f} segundos")
+        reporte.append("")
+        
+        reporte.append("✅ ÉXITOS:")
+        reporte.append("-" * 40)
+        if self.exitos:
+            for exito in self.exitos:
+                reporte.append(f"• {exito['modulo']}: {exito['mensaje']}")
+        else:
+            reporte.append("Ninguno")
+        
+        reporte.append("")
+        reporte.append("⚠️  ADVERTENCIAS:")
+        reporte.append("-" * 40)
+        if self.advertencias:
+            for adv in self.advertencias:
+                reporte.append(f"• {adv['modulo']}: {adv['mensaje']}")
+        else:
+            reporte.append("Ninguna")
+        
+        reporte.append("")
+        reporte.append("❌ ERRORES:")
+        reporte.append("-" * 40)
+        if self.errores:
+            for error in self.errores:
+                reporte.append(f"• {error['modulo']}: {error['error']}")
+                if error['detalles']:
+                    reporte.append(f"  → {error['detalles']}")
+        else:
+            reporte.append("Ninguno")
+        
+        reporte.append("")
+        reporte.append("=" * 80)
+        reporte.append("📊 RESUMEN:")
+        reporte.append(f"Éxitos: {len(self.exitos)}")
+        reporte.append(f"Advertencias: {len(self.advertencias)}")
+        reporte.append(f"Errores: {len(self.errores)}")
+        reporte.append(f"Estado: {'✅ COMPLETADO' if len(self.errores) == 0 else '⚠️  CON ERRORES'}")
+        reporte.append("=" * 80)
+        
+        return "\n".join(reporte)
+    
+    def guardar_reporte(self, archivo: str = "diagnostico_vecta.txt"):
+        contenido = self.generar_reporte()
+        with open(archivo, 'w', encoding='utf-8') as f:
+            f.write(contenido)
+        return archivo
+
+# ============================================================================
+# PASO 1: VERIFICACIÓN DEL ENTORNO
+# ==============================</div></div><div class="archivo" style="margin-left: 0px;">📄 <strong>vecta_corregido.py</strong> (20.72 KB)<div class="contenido"><strong>Contenido (preview):</strong><br>import os
+import sys
+import json
+import zipfile
+import shutil
+import time
+import subprocess
+import tempfile
+import importlib.util
+from pathlib import Path
+from datetime import datetime
+import traceback
+
+# ============================================================================
+# CONFIGURACION
+# ============================================================================
+class Config:
+    VERSION = "2.0.0"
+    BUILD_DATE = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    PROJECT_DIR = Path.cwd()
+    DIMENSIONES_DIR = PROJECT_DIR / "dimensiones"
+    CORE_DIR = PROJECT_DIR / "core"
+    PAQUETE_PKG = PROJECT_DIR / "paquete_vecta.pkg"  # CORREGIDO: Ahora es Path
+    ZIP_FINAL = PROJECT_DIR / "VECTA_12D_Automatico.zip"  # CORREGIDO: Ahora es Path
+
+# ============================================================================
+# SISTEMA DE DIAGNOSTICO
+# ============================================================================
+class AutoDiagnostico:
+    def __init__(self):
+        self.errores = []
+        self.exitos = []
+        self.advertencias = []
+    
+    def error(self, modulo, mensaje):
+        self.errores.append(f"{modulo}: {mensaje}")
+        print(f"[ERROR] {modulo}: {mensaje}")
+    
+    def exito(self, modulo, mensaje):
+        self.exitos.append(f"{modulo}: {mensaje}")
+        print(f"[OK] {modulo}: {mensaje}")
+    
+    def advertencia(self, modulo, mensaje):
+        self.advertencias.append(f"{modulo}: {mensaje}")
+        print(f"[ADVERTENCIA] {modulo}: {mensaje}")
+    
+    def reporte(self):
+        print("\n" + "="*60)
+        print("REPORTE DE DIAGNOSTICO")
+        print("="*60)
+        print(f"Exitos: {len(self.exitos)}")
+        print(f"Advertencias: {len(self.advertencias)}")
+        print(f"Errores: {len(self.errores)}")
+        
+        if self.errores:
+            print("\nERRORES:")
+            for e in self.errores:
+                print(f"  • {e}")
+        
+        return len(self.errores) == 0
+
+# ============================================================================
+# PASO 1: VERIFICAR ENTORNO
+# ============================================================================
+def verificar_entorno(diag):
+    print("\n" + "="*60)
+    print("PASO 1: VERIFICANDO ENTORNO")
+    print("="*60)
+    
+    # Verificar Python
+    try:
+        version = sys.version_info
+        if version.major == 3 and version.minor >= 7:
+            diag.exito("Python", f"Version {version.major}.{version.minor}.{version.micro} OK")
+        else:
+            diag.error("Python", f"Version {version.major}.{version.minor} detectada. Se requiere 3.7+")
+            return False
+    except:
+        diag.error("Python", "No se pudo verificar version")
+        return False
+    
+    # Verificar directorios
+    try:
+        Config.DIMENSIONES_DIR.mkdir(exist_ok=True)
+        Config.CORE_DIR.mkdir(exist_ok=True)
+        diag.exito("Directorios", "Estructura creada")
+    except Exception as e:
+        diag.error("Directorios", f"Error: {e}")
+        return False
+    
+    return True
+
+# ============================================================================
+# PASO 2: CREAR DIMENSIONES
+# ============================================================================
+def crear_dimensiones(diag):
+    print("\n" + "="*60)
+    print("PASO 2: CREANDO DIMENSIONES 12D")
+    print("="*60)
+    
+    dimensiones = {
+        1: ("Tiempo-Entropia", '''
+class DimensionTiempoEntropia:
+    def __init__(self):
+        self.nombre = "Tiempo-Entropia"
+        self.magnitud = 0.0
+    
+    def procesar(self, datos):
+        import time
+        return {"dimension": self.nombre, "magnitud": 0.5, "timestamp": time.time()}'''),
+        
+        2: ("Espacio-Volumen", '''
+class DimensionEspacioVolumen:
+    def __init__(self):
+        self.nombre = "Espacio-Volumen"
+        self.magnitud = 0.0
+    
+    def procesar(self, datos):
+        return {"dimension": self.nombre, "magnitud": 0.6}'''),
+        
+        3: ("Energia-Potencial", '''
+class DimensionEnergiaPotencial:
+    def __init__(self):
+        self.nombre = "Energia-Potencial"
+        self.magnitud = 0.0
+    
+    def procesar(self, datos):
+        return {"dimension": self.nombre, "magnitud": 0.3}'''),
+        
+        4: ("Informacion-Entropia", '''
+class DimensionInformacionEntropia:
+    def __init__(self):
+        self.nombre = "Informacion-Entropia"
+        self.magnitud = 0.0
+    
+    def procesar(self, datos):
+        return {"dimension": self.nombre, "magnitud": 0.4}'''),
+        
+        5: ("Conciencia-Atencion", '''
+class DimensionConcienciaAtencion:
+    def __init__(self):
+        self.nombre = "Conciencia-Atencion"
+        self.magnitud = 0.0
+    
+    def procesar(self, datos):
+        return {"dimension": self.nombre, "magnitud": 0.2}'''),
+        
+        6: ("Memoria-Persistencia", '''
+class DimensionMemoriaPersistencia:
+    def __init__(self):
+        self.nombre = "Memoria-Persistencia"
+        self.magnitud = 0.0
+    
+    def procesar(self, datos):
+        return {"dimen</div></div><div class="archivo" style="margin-left: 0px;">📄 <strong>vecta_launcher.py</strong> (13.26 KB)<div class="contenido"><strong>Contenido (preview):</strong><br>#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+VECTA 12D LAUNCHER - Sistema Autoprogramable
+============================================
+Lanzador principal del sistema de 12 dimensiones vectoriales.
+"""
+
+import sys
+import os
+import traceback
+from datetime import datetime
+
+# Configurar path para importaciones
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, BASE_DIR)
+
+def mostrar_banner():
+    """Muestra el banner de inicio del sistema."""
+    print("\n" + "=" * 70)
+    print("╔══════════════════════════════════════════════════════════════╗")
+    print("║                   VECTA 12D - SISTEMA AUTOPROGRAMABLE        ║")
+    print("║                   12 Dimensiones Vectoriales                 ║")
+    print("╚══════════════════════════════════════════════════════════════╝")
+    print("=" * 70)
+    print(f"Inicio: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"Directorio: {BASE_DIR}")
+    print("=" * 70)
+
+def inicializar_sistema():
+    """Inicializa y verifica todos los componentes del sistema."""
+    print("\n[1/3] 🚀 INICIALIZANDO SISTEMA VECTA 12D...")
+    
+    # Verificar estructura de directorios
+    directorios_necesarios = ['core', 'dimensiones']
+    for dir_name in directorios_necesarios:
+        if not os.path.exists(dir_name):
+            print(f"  ❌ ERROR: Directorio '{dir_name}' no encontrado")
+            return None
+        print(f"  ✓ Directorio '{dir_name}' encontrado")
+    
+    # Verificar archivos críticos
+    archivos_criticos = [
+        'core/vecta_12d_core.py',
+        'dimensiones/vector_12d.py'
+    ]
+    
+    for archivo in archivos_criticos:
+        if not os.path.exists(archivo):
+            print(f"  ❌ ERROR: Archivo '{archivo}' no encontrado")
+            return None
+        print(f"  ✓ Archivo '{archivo}' encontrado")
+    
+    return True
+
+def cargar_nucleo():
+    """Carga el núcleo principal de VECTA 12D."""
+    print("\n[2/3] ⚙️ CARGANDO NÚCLEO VECTA 12D...")
+    
+    try:
+        # Importar núcleo principal
+        from core.vecta_12d_core import VECTA_12D_Core
+        
+        # Crear instancia
+        vecta = VECTA_12D_Core()
+        
+        # Verificar dimensiones
+        if hasattr(vecta, 'dimensiones'):
+            num_dimensiones = len(vecta.dimensiones)
+            print(f"  ✓ Núcleo cargado: {num_dimensiones} dimensiones activas")
+        else:
+            print(f"  ✓ Núcleo cargado (atributo 'dimensiones' no disponible)")
+        
+        return vecta
+        
+    except ImportError as e:
+        print(f"  ❌ ERROR de importación: {e}")
+        print(f"  Traceback: {traceback.format_exc()}")
+        return None
+    except Exception as e:
+        print(f"  ❌ ERROR inesperado: {e}")
+        return None
+
+def cargar_sistema_vectorial():
+    """Carga el sistema vectorial 12D."""
+    print("\n[3/3] 🔄 CARGANDO SISTEMA VECTORIAL 12D...")
+    
+    try:
+        from dimensiones.vector_12d import SistemaVectorial12D
+        
+        sistema = SistemaVectorial12D()
+        
+        # Intentar obtener número de dimensiones
+        try:
+            num_dim = sistema.obtener_numero_dimensiones()
+            print(f"  ✓ Sistema vectorial: {num_dim} dimensiones cargadas")
+        except:
+            # Si falla, intentar método alternativo
+            if hasattr(sistema, 'dimensiones'):
+                print(f"  ✓ Sistema vectorial: {len(sistema.dimensiones)} dimensiones cargadas")
+            else:
+                print(f"  ✓ Sistema vectorial cargado (método de conteo no disponible)")
+        
+        return sistema
+        
+    except Exception as e:
+        print(f"  ⚠️ Sistema vectorial no disponible: {e}")
+        return None
+
+def mostrar_menu_principal():
+    """Muestra el menú principal de opciones."""
+    print("\n" + "═" * 70)
+    print("MENÚ PRINCIPAL - VECTA 12D")
+    print("═" * 70)
+    print("1. Procesar texto/comando")
+    print("2. Ver estado del sistema")
+    print("3. Probar dimensiones individuales")
+    print("4. Ejecutar autodiagnóstico")
+    print("5. Generar vector 12D aleatorio")
+    print("6. Sistema META-VECTA (Nuevo)")
+    print("7. Salir del sistema")
+    print("═" * 70)
+
+def procesar_opcion(opcion, vecta, sistema_vectorial):
+    """Procesa la opción seleccionada del menú."""
+    
+    if opcion == "1":
+        # Procesar entrada de texto
+        entrada = input("\n📝 Ingrese texto/comando a procesar: ").strip()
+        if entrada:
+            print(f"\n🔄 Procesando: '{entrada}'")
+            try:
+                resultado = vecta.procesar(entrada)
+                print(f"\n✅ RESULTADO:")
+                print(f"   Entrada: {entrada}")
+                print(f"   Salida: {resultado}")
+                
+                # Si hay sistema vectorial, procesar también allí
+                if sistema_vectorial:
+                    evento = {"texto": entrada, "timestamp": datetime.now().isoformat()}
+                    vector_resultado = sistema_vectorial.procesar_evento(evento)
+                    print(f"   Vector 12D generado: Sí</div></div><div class="archivo" style="margin-left: 0px;">📄 <strong>vecta_launcher.py.backup_20251225_185345</strong> (13.22 KB)</div><div class="archivo" style="margin-left: 0px;">📄 <strong>vecta_launcher.pydir</strong> (0.03 KB)</div><div class="archivo" style="margin-left: 0px;">📄 <strong>vecta_self_install.py</strong> (9.75 KB)<div class="contenido"><strong>Contenido (preview):</strong><br>#!/usr/bin/env python3
+"""
+VECTA 12D - INSTALADOR AUTO-CONTENIDO
+Descomprime e instala todo automáticamente
+"""
+import os
+import sys
+import zipfile
+import json
+import shutil
+import subprocess
+import tempfile
+from pathlib import Path
+
+class VECTA_AutoInstaller:
+    """Instalador automático que funciona sin dependencias externas"""
+    
+    def __init__(self):
+        self.install_dir = Path.home() / "VECTA_12D"
+        self.backup_dir = Path.home() / "VECTA_12D_Backup"
+        self.package_file = "paquete_vecta.pkg"
+        
+    def banner(self):
+        """Muestra banner de instalación"""
+        print("\n" + "="*60)
+        print("   🌀 VECTA 12D - INSTALACIÓN AUTOMÁTICA")
+        print("   Sistema Autoprogramable de 12 Dimensiones")
+        print("="*60)
+        
+    def check_python(self):
+        """Verifica versión de Python"""
+        version = sys.version_info
+        print(f"✅ Python {version.major}.{version.minor}.{version.micro}")
+        
+        if version.major < 3 or (version.major == 3 and version.minor < 8):
+            print("❌ Se requiere Python 3.8 o superior")
+            return False
+        return True
+    
+    def backup_existing(self):
+        """Hace backup de instalación previa"""
+        if self.install_dir.exists():
+            print(f"📦 Haciendo backup de instalación existente...")
+            if self.backup_dir.exists():
+                shutil.rmtree(self.backup_dir)
+            shutil.copytree(self.install_dir, self.backup_dir)
+            print(f"✅ Backup guardado en: {self.backup_dir}")
+    
+    def extract_package(self):
+        """Extrae el paquete completo"""
+        print(f"📦 Extrayendo paquete VECTA 12D...")
+        
+        if not os.path.exists(self.package_file):
+            print(f"❌ No se encontró {self.package_file}")
+            return False
+        
+        # Crear directorio de instalación
+        self.install_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Extraer contenido
+        with zipfile.ZipFile(self.package_file, 'r') as zip_ref:
+            zip_ref.extractall(self.install_dir)
+        
+        print(f"✅ Paquete extraído en: {self.install_dir}")
+        return True
+    
+    def install_dependencies(self):
+        """Instala dependencias automáticamente"""
+        print(f"📦 Instalando dependencias...")
+        
+        requirements = [
+            "numpy",
+            "cryptography",
+            "psutil",
+            "requests"
+        ]
+        
+        for package in requirements:
+            try:
+                subprocess.check_call([
+                    sys.executable, "-m", "pip", "install", 
+                    "--quiet", "--no-warn-script-location", package
+                ])
+                print(f"  ✅ {package}")
+            except:
+                print(f"  ⚠️  {package} (puede fallar, VECTA continuará)")
+        
+        print(f"✅ Dependencias instaladas")
+    
+    def create_shortcut(self):
+        """Crea acceso directo en escritorio"""
+        print(f"🔗 Creando acceso directo...")
+        
+        try:
+            import winshell
+            from win32com.client import Dispatch
+            
+            desktop = Path(winshell.desktop())
+            shortcut_path = desktop / "VECTA 12D.lnk"
+            
+            target = sys.executable
+            arguments = f'"{self.install_dir / "vecta_12d_launcher.py"}"'
+            working_dir = str(self.install_dir)
+            
+            shell = Dispatch('WScript.Shell')
+            shortcut = shell.CreateShortCut(str(shortcut_path))
+            shortcut.TargetPath = target
+            shortcut.Arguments = arguments
+            shortcut.WorkingDirectory = working_dir
+            shortcut.IconLocation = sys.executable
+            shortcut.save()
+            
+            print(f"✅ Acceso directo creado en escritorio")
+            
+        except ImportError:
+            # Fallback: crear archivo .bat
+            bat_content = f'''@echo off
+cd /d "{self.install_dir}"
+python vecta_12d_launcher.py
+pause
+'''
+            bat_path = self.install_dir / "Iniciar_VECTA.bat"
+            with open(bat_path, 'w') as f:
+                f.write(bat_content)
+            
+            # Copiar a escritorio
+            desktop = Path.home() / "Desktop"
+            desktop_bat = desktop / "Iniciar VECTA.bat"
+            shutil.copy2(bat_path, desktop_bat)
+            
+            print(f"✅ Archivo BAT creado en escritorio")
+        except Exception as e:
+            print(f"⚠️  No se pudo crear acceso directo: {e}")
+    
+    def create_config(self):
+        """Crea configuración inicial"""
+        print(f"⚙️  Creando configuración inicial...")
+        
+        config = {
+            "version": "12D.1.0.0",
+            "install_date": os.path.getctime(__file__),
+            "dimensions": 12,
+            "auto_update": True,
+            "security_level": "high",
+            "paths": {
+                "install": str(self.install_dir),
+                "data": str(self.install_dir / "data"),
+                "lo</div></div><div class="archivo" style="margin-left: 0px;">📄 <strong>vecta_simple.py</strong> (20.21 KB)<div class="contenido"><strong>Contenido (preview):</strong><br>#!/usr/bin/env python3
+# VECTA 12D - SISTEMA AUTOMATICO COMPLETO
+# ========================================
+
+import os
+import sys
+import json
+import zipfile
+import shutil
+import time
+import subprocess
+import tempfile
+import importlib.util
+from pathlib import Path
+from datetime import datetime
+import traceback
+
+# ============================================================================
+# CONFIGURACION
+# ============================================================================
+class Config:
+    VERSION = "2.0.0"
+    BUILD_DATE = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    PROJECT_DIR = Path.cwd()
+    DIMENSIONES_DIR = PROJECT_DIR / "dimensiones"
+    CORE_DIR = PROJECT_DIR / "core"
+    PAQUETE_PKG = "paquete_vecta.pkg"
+    ZIP_FINAL = "VECTA_12D_Automatico.zip"
+
+# ============================================================================
+# SISTEMA DE DIAGNOSTICO
+# ============================================================================
+class AutoDiagnostico:
+    def __init__(self):
+        self.errores = []
+        self.exitos = []
+        self.advertencias = []
+    
+    def error(self, modulo, mensaje):
+        self.errores.append(f"{modulo}: {mensaje}")
+        print(f"[ERROR] {modulo}: {mensaje}")
+    
+    def exito(self, modulo, mensaje):
+        self.exitos.append(f"{modulo}: {mensaje}")
+        print(f"[OK] {modulo}: {mensaje}")
+    
+    def advertencia(self, modulo, mensaje):
+        self.advertencias.append(f"{modulo}: {mensaje}")
+        print(f"[ADVERTENCIA] {modulo}: {mensaje}")
+    
+    def reporte(self):
+        print("\n" + "="*60)
+        print("REPORTE DE DIAGNOSTICO")
+        print("="*60)
+        print(f"Exitos: {len(self.exitos)}")
+        print(f"Advertencias: {len(self.advertencias)}")
+        print(f"Errores: {len(self.errores)}")
+        
+        if self.errores:
+            print("\nERRORES:")
+            for e in self.errores:
+                print(f"  • {e}")
+        
+        return len(self.errores) == 0
+
+# ============================================================================
+# PASO 1: VERIFICAR ENTORNO
+# ============================================================================
+def verificar_entorno(diag):
+    print("\n" + "="*60)
+    print("PASO 1: VERIFICANDO ENTORNO")
+    print("="*60)
+    
+    # Verificar Python
+    try:
+        version = sys.version_info
+        if version.major == 3 and version.minor >= 7:
+            diag.exito("Python", f"Version {version.major}.{version.minor}.{version.micro} OK")
+        else:
+            diag.error("Python", f"Version {version.major}.{version.minor} detectada. Se requiere 3.7+")
+            return False
+    except:
+        diag.error("Python", "No se pudo verificar version")
+        return False
+    
+    # Verificar directorios
+    try:
+        Config.DIMENSIONES_DIR.mkdir(exist_ok=True)
+        Config.CORE_DIR.mkdir(exist_ok=True)
+        diag.exito("Directorios", "Estructura creada")
+    except Exception as e:
+        diag.error("Directorios", f"Error: {e}")
+        return False
+    
+    return True
+
+# ============================================================================
+# PASO 2: CREAR DIMENSIONES
+# ============================================================================
+def crear_dimensiones(diag):
+    print("\n" + "="*60)
+    print("PASO 2: CREANDO DIMENSIONES 12D")
+    print("="*60)
+    
+    dimensiones = {
+        1: ("Tiempo-Entropia", '''
+class DimensionTiempoEntropia:
+    def __init__(self):
+        self.nombre = "Tiempo-Entropia"
+        self.magnitud = 0.0
+    
+    def procesar(self, datos):
+        import time
+        return {"dimension": self.nombre, "magnitud": 0.5, "timestamp": time.time()}'''),
+        
+        2: ("Espacio-Volumen", '''
+class DimensionEspacioVolumen:
+    def __init__(self):
+        self.nombre = "Espacio-Volumen"
+        self.magnitud = 0.0
+    
+    def procesar(self, datos):
+        return {"dimension": self.nombre, "magnitud": 0.6}'''),
+        
+        3: ("Energia-Potencial", '''
+class DimensionEnergiaPotencial:
+    def __init__(self):
+        self.nombre = "Energia-Potencial"
+        self.magnitud = 0.0
+    
+    def procesar(self, datos):
+        return {"dimension": self.nombre, "magnitud": 0.3}'''),
+        
+        4: ("Informacion-Entropia", '''
+class DimensionInformacionEntropia:
+    def __init__(self):
+        self.nombre = "Informacion-Entropia"
+        self.magnitud = 0.0
+    
+    def procesar(self, datos):
+        return {"dimension": self.nombre, "magnitud": 0.4}'''),
+        
+        5: ("Conciencia-Atencion", '''
+class DimensionConcienciaAtencion:
+    def __init__(self):
+        self.nombre = "Conciencia-Atencion"
+        self.magnitud = 0.0
+    
+    def procesar(self, datos):
+        return {"dimension": self.nombre, "magnitud": 0.2}'''),
+        
+        6: ("Memoria-Persistencia", '''
+class DimensionMemoriaPersistencia:
+    def __init__(self):
+        self.nombre = "Memoria-Persistencia"
+        self.magnitud = 0.0
+    
+    def procesar(self, datos</div></div><div class="archivo" style="margin-left: 0px;">📄 <strong>vector_12d.py</strong> (10.23 KB)<div class="contenido"><strong>Contenido (preview):</strong><br>"""
+SISTEMA VECTORIAL 12D - VERSIÓN CORREGIDA
+Sistema unificado de 12 dimensiones vectoriales
+"""
+import json
+import time
+import importlib
+import sys
+import os
+from typing import List, Dict, Any
+
+# Asegurar que podemos importar desde el directorio actual
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+class Vector12D:
+    """Representa un vector en 12 dimensiones"""
+    def __init__(self, dimensiones: List[float]):
+        self.dimensiones = dimensiones
+        self.timestamp = time.time()
+        
+    def magnitud(self) -> float:
+        """Calcula la magnitud del vector"""
+        import math
+        suma_cuadrados = sum(d * d for d in self.dimensiones)
+        return math.sqrt(suma_cuadrados) if suma_cuadrados > 0 else 0.0
+    
+    def normalizar(self) -> 'Vector12D':
+        """Devuelve una versión normalizada del vector"""
+        mag = self.magnitud()
+        if mag > 0:
+            return Vector12D([d / mag for d in self.dimensiones])
+        return Vector12D([0.0] * 12)
+    
+    def to_dict(self) -> Dict[str, Any]:
+        """Convierte el vector a diccionario"""
+        return {
+            'dimensiones': self.dimensiones,
+            'magnitud': self.magnitud(),
+            'timestamp': self.timestamp,
+            'dimensiones_count': len(self.dimensiones)
+        }
+    
+    def __str__(self) -> str:
+        """Representación en texto del vector"""
+        dim_str = ", ".join([f"{d:.4f}" for d in self.dimensiones])
+        return f"Vector12D(mag={self.magnitud():.4f}, dims=[{dim_str}])"
+
+class SistemaVectorial12D:
+    """Sistema principal que maneja las 12 dimensiones"""
+    
+    def __init__(self):
+        print("[Vector12D] Inicializando sistema vectorial...")
+        self.dimensiones = []
+        self._cargar_dimensiones()
+        print(f"[Vector12D] Sistema inicializado con {len(self.dimensiones)} dimensiones")
+    
+    def _cargar_dimensiones(self):
+        """Carga dinámicamente las 12 dimensiones"""
+        dimensiones_cargadas = 0
+        
+        for i in range(1, 13):
+            try:
+                # Construir el nombre del módulo
+                modulo_nombre = f"dimensiones.dimension_{i}"
+                
+                # Verificar si el archivo existe
+                archivo_dimension = f"dimensiones/dimension_{i}.py"
+                if not os.path.exists(archivo_dimension):
+                    print(f"  [Vector12D] Advertencia: No existe {archivo_dimension}")
+                    continue
+                
+                # Importar el módulo
+                modulo = importlib.import_module(modulo_nombre)
+                
+                # Buscar la clase principal en el módulo
+                clase_dimension = None
+                for nombre_clase in dir(modulo):
+                    # Filtrar nombres que contengan 'Dimension' o 'Dim'
+                    if 'Dimension' in nombre_clase or 'Dim' in nombre_clase:
+                        obj = getattr(modulo, nombre_clase)
+                        if isinstance(obj, type):  # Es una clase
+                            clase_dimension = obj
+                            break
+                
+                if clase_dimension:
+                    # Crear instancia de la dimensión
+                    instancia = clase_dimension()
+                    self.dimensiones.append(instancia)
+                    dimensiones_cargadas += 1
+                    print(f"  [Vector12D] ✓ Dimensión {i} cargada: {clase_dimension.__name__}")
+                else:
+                    print(f"  [Vector12D] ✗ No se encontró clase en dimensión {i}")
+                    
+            except ImportError as e:
+                print(f"  [Vector12D] ✗ Error importando dimensión {i}: {str(e)[:100]}")
+            except Exception as e:
+                print(f"  [Vector12D] ✗ Error cargando dimensión {i}: {str(e)[:100]}")
+        
+        # Si no se cargaron dimensiones, crear dimensiones por defecto
+        if dimensiones_cargadas == 0:
+            print("  [Vector12D] ⚠️ Creando dimensiones por defecto...")
+            self._crear_dimensiones_por_defecto()
+    
+    def _crear_dimensiones_por_defecto(self):
+        """Crea dimensiones básicas por defecto si no se pueden cargar las reales"""
+        class DimensionBase:
+            def __init__(self, nombre, indice):
+                self.nombre = nombre
+                self.indice = indice
+                self.contador = 0
+            
+            def procesar(self, evento):
+                self.contador += 1
+                # Valor simple basado en el índice y longitud del evento
+                valor = 0.1 * self.indice + 0.01 * len(str(evento))
+                return {'magnitud': valor, 'procesado': True, 'dimension': self.indice}
+        
+        nombres = [
+            "Tiempo-Entropía", "Espacio-Volumen", "Energía-Potencial",
+            "Información-Entropía", "Conciencia-Atención", "Memoria-Persistencia",
+            "Aprendizaje-Adaptación", "Creatividad-Generación", "Ejecución-Acció</div></div><div class="archivo" style="margin-left: 0px;">📄 <strong>verificar.py</strong> (1.28 KB)<div class="contenido"><strong>Contenido (preview):</strong><br>import zipfile 
+import os 
+ 
+print("?? VERIFICACIN DE VECTA 12D") 
+print("="*50) 
+ 
+zip_file = "VECTA_12D_Automatico.zip" 
+ 
+print("1. Verificando ZIP...") 
+if os.path.exists(zip_file): 
+    size = os.path.getsize(zip_file) 
+    print(f"   V ZIP existe: {size} bytes ({size/1024:.1f} KB)") 
+else: 
+    print(f"   ? ZIP no encontrado") 
+ 
+print("2. Contenido del ZIP:") 
+try: 
+    with zipfile.ZipFile(zip_file, "r") as z: 
+        files = z.namelist() 
+        print(f"   V {len(files)} archivos encontrados:") 
+        for file in files: 
+            info = z.getinfo(file) 
+            print(f"      {file} ({info.file_size} bytes)") 
+except Exception as e: 
+    print(f"   ? Error: {e}") 
+ 
+print("3. Verificando archivos requeridos:") 
+required = ["INSTAR.bat", "vecta_self_install.py", "vecta_12d_launcher.py", "paquete_vecta.pkg"] 
+try: 
+    with zipfile.ZipFile(zip_file, "r") as z: 
+        zip_files = z.namelist() 
+        for req in required: 
+            if req in zip_files: 
+                print(f"   V {req} - PRESENTE") 
+            else: 
+                print(f"   ? {req} - FALTANTE") 
+except: 
+    print("   ? No se pudo verificar") 
+ 
+print("="*50) 
+print("? VERIFICACIN COMPLETADA") 
+print("\nPara instalar:") 
+print("1. Extrae el ZIP") 
+</div></div><div class="archivo" style="margin-left: 0px;">📄 <strong>verificar.pypython</strong> (0.07 KB)</div>
+        </div>
+    </body>
+    </html>
+    

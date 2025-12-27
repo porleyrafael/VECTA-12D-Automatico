@@ -1,0 +1,59 @@
+{
+  "patterns": [
+    {
+      "input": "crea archivo prueba_simple.py",
+      "action": "create_file",
+      "params": {
+        "file_name": "prueba_simple.py"
+      },
+      "timestamp": "2025-12-26T01:34:58.429831"
+    },
+    {
+      "input": "construye módulo",
+      "action": "create_file",
+      "params": {
+        "file_name": "módulo.py"
+      },
+      "timestamp": "2025-12-26T01:36:03.873979"
+    },
+    {
+      "input": "crea archivo prueba.py",
+      "action": "create_file",
+      "params": {
+        "file_name": "prueba.py"
+      },
+      "timestamp": "2025-12-26T21:37:26.205299"
+    }
+  ],
+  "command_mappings": {
+    "crea archivo prueba_simple.py": {
+      "action": "create_file",
+      "params": {
+        "file_name": "prueba_simple.py"
+      },
+      "learned_at": "2025-12-26T01:34:58.429796",
+      "uses": 0
+    },
+    "construye módulo": {
+      "action": "create_file",
+      "params": {
+        "file_name": "módulo.py"
+      },
+      "learned_at": "2025-12-26T01:36:03.873912",
+      "uses": 1
+    },
+    "crea archivo prueba.py": {
+      "action": "create_file",
+      "params": {
+        "file_name": "prueba.py"
+      },
+      "learned_at": "2025-12-26T21:37:26.205274",
+      "uses": 0
+    }
+  },
+  "statistics": {
+    "total_learned": 3,
+    "successful_uses": 1,
+    "last_updated": "2025-12-26T21:37:26.205307"
+  }
+}

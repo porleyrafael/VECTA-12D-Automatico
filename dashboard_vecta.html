@@ -1,0 +1,4020 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard VECTA 12D</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+            color: #e0e0e0; 
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { 
+            max-width: 1400px; 
+            margin: 0 auto; 
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .header { 
+            grid-column: 1 / -1;
+            background: rgba(0, 0, 0, 0.3); 
+            padding: 25px; 
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        .header h1 { 
+            color: #00d4ff; 
+            font-size: 2.5em; 
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+        }
+        .header p { 
+            color: #a0a0a0; 
+            font-size: 1.1em;
+        }
+        .card { 
+            background: rgba(20, 30, 40, 0.7); 
+            border-radius: 12px; 
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover { 
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        }
+        .card h2 { 
+            color: #00ff88; 
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(0, 255, 136, 0.3);
+        }
+        .card h3 { 
+            color: #00d4ff; 
+            margin: 15px 0 10px 0;
+        }
+        .status-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+            gap: 15px;
+        }
+        .status-item { 
+            background: rgba(0, 0, 0, 0.2); 
+            padding: 15px; 
+            border-radius: 8px;
+            border-left: 4px solid #00d4ff;
+        }
+        .status-label { 
+            color: #a0a0a0; 
+            font-size: 0.9em; 
+            margin-bottom: 5px;
+        }
+        .status-value { 
+            color: #ffffff; 
+            font-size: 1.2em; 
+            font-weight: bold;
+        }
+        .file-tree { 
+            max-height: 500px; 
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 15px;
+        }
+        .file-item { 
+            padding: 8px 12px; 
+            margin: 4px 0; 
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            transition: background 0.2s;
+        }
+        .file-item:hover { 
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .file-icon { 
+            margin-right: 10px; 
+            font-size: 1.2em;
+        }
+        .folder { color: #00d4ff; }
+        .python { color: #00ff88; }
+        .json { color: #ffaa00; }
+        .txt { color: #a0a0ff; }
+        .bat { color: #ff5555; }
+        .other { color: #a0a0a0; }
+        .changes-list { 
+            list-style: none;
+        }
+        .change-item { 
+            background: rgba(0, 0, 0, 0.2); 
+            padding: 15px; 
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid;
+            animation: slideIn 0.5s ease-out;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(-20px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        .change-added { border-left-color: #00ff88; }
+        .change-modified { border-left-color: #00d4ff; }
+        .change-deleted { border-left-color: #ff5555; }
+        .change-time { 
+            color: #a0a0a0; 
+            font-size: 0.9em; 
+            margin-bottom: 5px;
+        }
+        .change-action { 
+            color: #ffffff; 
+            font-weight: bold; 
+            margin-right: 10px;
+        }
+        .change-path { 
+            color: #cccccc; 
+            font-family: monospace;
+            word-break: break-all;
+        }
+        .auto-refresh { 
+            background: rgba(0, 212, 255, 0.1); 
+            padding: 10px; 
+            border-radius: 6px;
+            margin-top: 20px;
+            text-align: center;
+            font-size: 0.9em;
+            color: #00d4ff;
+        }
+        .footer { 
+            grid-column: 1 / -1;
+            text-align: center; 
+            padding: 20px; 
+            color: #666; 
+            font-size: 0.9em;
+            margin-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .level-1 { margin-left: 10px; }
+        .level-2 { margin-left: 30px; }
+        .level-3 { margin-left: 50px; }
+        .level-4 { margin-left: 70px; }
+        .level-5 { margin-left: 90px; }
+        .level-6 { margin-left: 110px; }
+        .level-7 { margin-left: 130px; }
+        .level-8 { margin-left: 150px; }
+        .level-9 { margin-left: 170px; }
+        .level-10 { margin-left: 190px; }
+    </style>
+    <script>
+        // Auto-refresh cada 5 segundos
+        setTimeout(function() {
+            window.location.reload();
+        }, 5000);
+        
+        // Resaltar archivos por extensión
+        function getFileIcon(extension) {
+            const icons = {
+                '.py': '🐍', '.json': '📊', '.txt': '📄', '.md': '📝',
+                '.bat': '⚙️', '.html': '🌐', '.css': '🎨', '.js': '📜',
+                '.png': '🖼️', '.jpg': '🖼️', '.ico': '🖼️'
+            };
+            return icons[extension] || '📄';
+        }
+        
+        function getFileClass(extension) {
+            const classes = {
+                '.py': 'python', '.json': 'json', '.txt': 'txt', 
+                '.md': 'txt', '.bat': 'bat', '.html': 'other',
+                '.css': 'other', '.js': 'other'
+            };
+            return classes[extension] || 'other';
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 VECTA 12D - DASHBOARD EN TIEMPO REAL</h1>
+            <p>Monitoreo automático del sistema de 12 dimensiones vectoriales | Última actualización: 2025-12-27 04:47:12</p>
+        </div>
+        
+        <div class="card">
+            <h2>📊 ESTADO DEL SISTEMA</h2>
+            <div class="status-grid">
+                <div class="status-item">
+                    <div class="status-label">Directorio Actual</div>
+                    <div class="status-value">VECTA 12D Automatico</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-label">Total Archivos</div>
+                    <div class="status-value">419</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-label">Total Carpetas</div>
+                    <div class="status-value">113</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-label">Tamaño Total</div>
+                    <div class="status-value">4.2 MB</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-label">Componentes Activos</div>
+                    <div class="status-value">4/4</div>
+                </div>
+            </div>
+            
+            <h3>✅ Componentes Principales</h3>
+            <div class="status-grid">
+                <div class="status-item" style="border-left-color: #00ff88">
+                    <div class="status-label">Lanzador Principal</div>
+                    <div class="status-value">✓ Activo</div>
+                </div>
+                <div class="status-item" style="border-left-color: #00ff88">
+                    <div class="status-label">Núcleo META-VECTA</div>
+                    <div class="status-value">✓ Activo</div>
+                </div>
+                <div class="status-item" style="border-left-color: #00ff88">
+                    <div class="status-label">Sistema Vectorial</div>
+                    <div class="status-value">✓ Activo</div>
+                </div>
+                <div class="status-item" style="border-left-color: #00ff88">
+                    <div class="status-label">Dimensión 1</div>
+                    <div class="status-value">✓ Activa</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>🔄 ÚLTIMOS 3 CAMBIOS</h2>
+            <div class="changes-list">
+                
+        <div class="change-item change-deleted">
+            <div class="change-time">04:47:12</div>
+            <div>
+                <span class="change-action">🗑️ ELIMINADO</span>
+                <span class="change-path">.git\tR26eG3</span>
+            </div>
+        </div>
+        <div class="change-item change-added">
+            <div class="change-time">04:47:11</div>
+            <div>
+                <span class="change-action">🆕 CREADO</span>
+                <span class="change-path">.git\tR26eG3</span>
+            </div>
+        </div>
+        <div class="change-item change-deleted">
+            <div class="change-time">04:47:10</div>
+            <div>
+                <span class="change-action">🗑️ ELIMINADO</span>
+                <span class="change-path">.git\config</span>
+            </div>
+        </div>
+                
+            </div>
+            
+            <div class="auto-refresh">
+                ⏱️ Auto-refresh en 5 segundos | Cambios detectados en tiempo real
+            </div>
+        </div>
+        
+        <div class="card" style="grid-column: 1 / -1;">
+            <h2>📁 ESTRUCTURA DE ARCHIVOS</h2>
+            <p style="margin-bottom: 15px; color: #a0a0a0;">
+                Directorio base: C:\Users\Rafael\Desktop\VECTA 12D Automatico | Total items: 531
+            </p>
+            <div class="file-tree">
+                
+        <div class="file-item level-0">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">VECTA 12D Automatico</div>
+                <div style="color: #888; font-size: 0.9em;">(75 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">.gitignore</div>
+                <div style="color: #888; font-size: 0.9em;">21.0 B | 2025-12-27 04:20:18</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">analizar_carpeta.py</div>
+                <div style="color: #888; font-size: 0.9em;">9.4 KB | 2025-12-25 20:37:01</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">auto_implementar_vecta.py</div>
+                <div style="color: #888; font-size: 0.9em;">12.5 KB | 2025-12-26 11:30:03</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">auto_implementar_vecta_backup.py</div>
+                <div style="color: #888; font-size: 0.9em;">12.5 KB | 2025-12-26 11:30:03</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon bat">⚙️</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">auto_snapshot.bat</div>
+                <div style="color: #888; font-size: 0.9em;">346.0 B | 2025-12-25 23:16:42</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">configurar_github.py</div>
+                <div style="color: #888; font-size: 0.9em;">908.0 B | 2025-12-27 04:19:52</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">configurar_github_vecta.py</div>
+                <div style="color: #888; font-size: 0.9em;">3.8 KB | 2025-12-27 03:55:50</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">correccion_simple.py</div>
+                <div style="color: #888; font-size: 0.9em;">1.6 KB | 2025-12-26 03:18:08</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">corregir_importaciones.py</div>
+                <div style="color: #888; font-size: 0.9em;">13.8 KB | 2025-12-27 01:32:37</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">corregir_indentacion.py</div>
+                <div style="color: #888; font-size: 0.9em;">7.5 KB | 2025-12-26 03:14:38</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">crear_dashboard_vecta.py</div>
+                <div style="color: #888; font-size: 0.9em;">23.2 KB | 2025-12-27 02:58:37</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">crear_vecta_filosofico.py</div>
+                <div style="color: #888; font-size: 0.9em;">65.5 KB | 2025-12-27 01:16:38</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">crear_vector.py</div>
+                <div style="color: #888; font-size: 0.9em;">10.8 KB | 2025-12-25 17:39:17</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">crear_zip.py</div>
+                <div style="color: #888; font-size: 0.9em;">1.1 KB | 2025-12-25 14:43:19</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">create_vecta_package.py</div>
+                <div style="color: #888; font-size: 0.9em;">5.6 KB | 2025-12-25 14:29:47</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dashboard_corregido.py</div>
+                <div style="color: #888; font-size: 0.9em;">20.8 KB | 2025-12-27 03:01:57</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon other">🌐</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dashboard_vecta.html</div>
+                <div style="color: #888; font-size: 0.9em;">188.8 KB | 2025-12-27 04:47:12</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">generar_reporte_completo.py</div>
+                <div style="color: #888; font-size: 0.9em;">9.9 KB | 2025-12-25 23:07:27</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon bat">⚙️</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">INSTALAR.bat</div>
+                <div style="color: #888; font-size: 0.9em;">203.0 B | 2025-12-27 01:19:43</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">instalar_sistema_snapshot.py</div>
+                <div style="color: #888; font-size: 0.9em;">21.8 KB | 2025-12-25 22:45:08</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">integrar_meta_vecta.py</div>
+                <div style="color: #888; font-size: 0.9em;">49.2 KB | 2025-12-25 18:52:49</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">lanzar_vecta.py</div>
+                <div style="color: #888; font-size: 0.9em;">339.0 B | 2025-12-26 22:02:54</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">módulo.py</div>
+                <div style="color: #888; font-size: 0.9em;">360.0 B | 2025-12-26 01:36:31</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">paquete_vecta.pkg</div>
+                <div style="color: #888; font-size: 0.9em;">5.8 KB | 2025-12-25 16:32:58</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">probar_sistema_filosofico.py</div>
+                <div style="color: #888; font-size: 0.9em;">3.2 KB | 2025-12-27 01:19:43</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">prueba.py</div>
+                <div style="color: #888; font-size: 0.9em;">235.0 B | 2025-12-26 21:37:26</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon json">📊</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">prueba_filosofica.json</div>
+                <div style="color: #888; font-size: 0.9em;">503.0 B | 2025-12-27 01:24:56</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">prueba_simple.py</div>
+                <div style="color: #888; font-size: 0.9em;">366.0 B | 2025-12-26 01:34:58</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">prueba_vecta.py</div>
+                <div style="color: #888; font-size: 0.9em;">448.0 B | 2025-12-25 16:47:37</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">python fix_simple.py</div>
+                <div style="color: #888; font-size: 0.9em;">453.0 B | 2025-12-25 19:32:26</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon txt">📝</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">README.md</div>
+                <div style="color: #888; font-size: 0.9em;">49.0 B | 2025-12-27 04:20:18</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon txt">📝</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">README_VECTA_CHAT.md</div>
+                <div style="color: #888; font-size: 0.9em;">458.0 B | 2025-12-26 00:12:42</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon txt">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">README_VECTA_FILOSOFICO.txt</div>
+                <div style="color: #888; font-size: 0.9em;">997.0 B | 2025-12-27 01:19:43</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon json">📊</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">registro_incorporacion.json</div>
+                <div style="color: #888; font-size: 0.9em;">301.0 B | 2025-12-25 18:53:47</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">reparar_menu.py</div>
+                <div style="color: #888; font-size: 0.9em;">9.3 KB | 2025-12-25 19:04:45</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">reparar_opcion6.py</div>
+                <div style="color: #888; font-size: 0.9em;">14.4 KB | 2025-12-25 19:14:44</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">reparar_vecta.py</div>
+                <div style="color: #888; font-size: 0.9em;">10.4 KB | 2025-12-25 18:12:36</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon other">🌐</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">reporte_carpeta.html</div>
+                <div style="color: #888; font-size: 0.9em;">96.8 KB | 2025-12-25 20:38:35</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon json">📊</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">reporte_carpeta.json</div>
+                <div style="color: #888; font-size: 0.9em;">107.3 KB | 2025-12-25 20:38:35</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon txt">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">reporte_compacto.txt</div>
+                <div style="color: #888; font-size: 0.9em;">4.1 KB | 2025-12-27 00:27:06</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon txt">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">reporte_vecta.txt</div>
+                <div style="color: #888; font-size: 0.9em;">687.0 B | 2025-12-25 22:58:51</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon txt">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">reporte_vecta_20251225_230927.txt</div>
+                <div style="color: #888; font-size: 0.9em;">12.6 KB | 2025-12-25 23:09:27</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon txt">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">reporte_vecta_20251226_022112.txt</div>
+                <div style="color: #888; font-size: 0.9em;">12.7 KB | 2025-12-26 02:21:12</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon txt">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">reporte_vecta_20251226_033157.txt</div>
+                <div style="color: #888; font-size: 0.9em;">12.7 KB | 2025-12-26 03:31:57</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon txt">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">reporte_vecta_20251227_002706.txt</div>
+                <div style="color: #888; font-size: 0.9em;">9.6 KB | 2025-12-27 00:27:06</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon txt">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">RESUMEN_INSTALACION.txt</div>
+                <div style="color: #888; font-size: 0.9em;">1.1 KB | 2025-12-25 22:46:10</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">setup_dashboard.py</div>
+                <div style="color: #888; font-size: 0.9em;">25.3 KB | 2025-12-27 02:00:55</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon bat">⚙️</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">setup_vecta_chat.bat</div>
+                <div style="color: #888; font-size: 0.9em;">1.2 KB | 2025-12-26 00:11:17</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon bat">⚙️</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">subir.bat</div>
+                <div style="color: #888; font-size: 0.9em;">736.0 B | 2025-12-27 04:44:55</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">VECTA_12D_Automatico.zip</div>
+                <div style="color: #888; font-size: 0.9em;">10.6 KB | 2025-12-25 16:32:59</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_12d_launcher.py</div>
+                <div style="color: #888; font-size: 0.9em;">4.4 KB | 2025-12-25 16:40:23</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_ai_chat.py</div>
+                <div style="color: #888; font-size: 0.9em;">312.0 B | 2025-12-26 22:02:54</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_ai_snapshot.py</div>
+                <div style="color: #888; font-size: 0.9em;">32.1 KB | 2025-12-25 22:23:20</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_auto.py</div>
+                <div style="color: #888; font-size: 0.9em;">2.1 KB | 2025-12-25 22:46:10</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_auto_bootstrap.py</div>
+                <div style="color: #888; font-size: 0.9em;">41.9 KB | 2025-12-26 21:49:44</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_auto_build.py</div>
+                <div style="color: #888; font-size: 0.9em;">45.7 KB | 2025-12-25 16:06:49</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_corregido.py</div>
+                <div style="color: #888; font-size: 0.9em;">20.7 KB | 2025-12-25 16:30:46</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_launcher.py</div>
+                <div style="color: #888; font-size: 0.9em;">7.5 KB | 2025-12-27 01:19:43</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_launcher.py.backup_20251225_185345</div>
+                <div style="color: #888; font-size: 0.9em;">13.2 KB | 2025-12-25 17:05:08</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_launcher.pydir</div>
+                <div style="color: #888; font-size: 0.9em;">31.0 B | 2025-12-25 16:46:00</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_learner.py</div>
+                <div style="color: #888; font-size: 0.9em;">5.9 KB | 2025-12-26 01:20:35</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_self_install.py</div>
+                <div style="color: #888; font-size: 0.9em;">9.7 KB | 2025-12-25 14:07:53</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_simple.py</div>
+                <div style="color: #888; font-size: 0.9em;">20.2 KB | 2025-12-25 16:15:03</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_snapshot_system.py</div>
+                <div style="color: #888; font-size: 0.9em;">8.0 KB | 2025-12-25 22:46:07</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_todo_en_uno.py</div>
+                <div style="color: #888; font-size: 0.9em;">46.3 KB | 2025-12-26 21:33:34</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_todo_en_uno_corregido.py</div>
+                <div style="color: #888; font-size: 0.9em;">36.9 KB | 2025-12-26 22:00:07</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vector_12d.py</div>
+                <div style="color: #888; font-size: 0.9em;">10.2 KB | 2025-12-25 17:28:47</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">verificar.py</div>
+                <div style="color: #888; font-size: 0.9em;">1.3 KB | 2025-12-25 14:59:55</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">verificar.pypython</div>
+                <div style="color: #888; font-size: 0.9em;">67.0 B | 2025-12-25 15:00:27</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">.git</div>
+                <div style="color: #888; font-size: 0.9em;">(8 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-2">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">config</div>
+                <div style="color: #888; font-size: 0.9em;">130.0 B | 2025-12-27 04:46:46</div>
+            </div>
+        </div>
+        <div class="file-item level-2">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">description</div>
+                <div style="color: #888; font-size: 0.9em;">73.0 B | 2025-12-27 04:46:46</div>
+            </div>
+        </div>
+        <div class="file-item level-2">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">HEAD</div>
+                <div style="color: #888; font-size: 0.9em;">23.0 B | 2025-12-27 04:46:47</div>
+            </div>
+        </div>
+        <div class="file-item level-2">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">index.lock</div>
+                <div style="color: #888; font-size: 0.9em;">0.0 B | 2025-12-27 04:46:47</div>
+            </div>
+        </div>
+        <div class="file-item level-2">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">hooks</div>
+                <div style="color: #888; font-size: 0.9em;">(14 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">applypatch-msg.sample</div>
+                <div style="color: #888; font-size: 0.9em;">478.0 B | 2025-12-27 04:46:46</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">commit-msg.sample</div>
+                <div style="color: #888; font-size: 0.9em;">896.0 B | 2025-12-27 04:46:46</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">fsmonitor-watchman.sample</div>
+                <div style="color: #888; font-size: 0.9em;">4.6 KB | 2025-12-27 04:46:46</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">post-update.sample</div>
+                <div style="color: #888; font-size: 0.9em;">189.0 B | 2025-12-27 04:46:46</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">pre-applypatch.sample</div>
+                <div style="color: #888; font-size: 0.9em;">424.0 B | 2025-12-27 04:46:46</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">pre-commit.sample</div>
+                <div style="color: #888; font-size: 0.9em;">1.6 KB | 2025-12-27 04:46:46</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">pre-merge-commit.sample</div>
+                <div style="color: #888; font-size: 0.9em;">416.0 B | 2025-12-27 04:46:46</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">pre-push.sample</div>
+                <div style="color: #888; font-size: 0.9em;">1.3 KB | 2025-12-27 04:46:46</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">pre-rebase.sample</div>
+                <div style="color: #888; font-size: 0.9em;">4.8 KB | 2025-12-27 04:46:46</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">pre-receive.sample</div>
+                <div style="color: #888; font-size: 0.9em;">544.0 B | 2025-12-27 04:46:46</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">prepare-commit-msg.sample</div>
+                <div style="color: #888; font-size: 0.9em;">1.5 KB | 2025-12-27 04:46:46</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">push-to-checkout.sample</div>
+                <div style="color: #888; font-size: 0.9em;">2.7 KB | 2025-12-27 04:46:46</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">sendemail-validate.sample</div>
+                <div style="color: #888; font-size: 0.9em;">2.3 KB | 2025-12-27 04:46:46</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">update.sample</div>
+                <div style="color: #888; font-size: 0.9em;">3.6 KB | 2025-12-27 04:46:46</div>
+            </div>
+        </div>
+        <div class="file-item level-2">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">info</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">exclude</div>
+                <div style="color: #888; font-size: 0.9em;">240.0 B | 2025-12-27 04:46:46</div>
+            </div>
+        </div>
+        <div class="file-item level-2">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">objects</div>
+                <div style="color: #888; font-size: 0.9em;">(75 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">06</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">e9bc7882ff0ba116a6b9a4fdc85174f609ca4a</div>
+                <div style="color: #888; font-size: 0.9em;">577.0 B | 2025-12-27 04:47:10</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">0b</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dfecfe666df733daae655904dcf8a28727bc4d</div>
+                <div style="color: #888; font-size: 0.9em;">531.0 B | 2025-12-27 04:47:09</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">0c</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">0c46d00a7607332905041cd2e3e885b7dd717b</div>
+                <div style="color: #888; font-size: 0.9em;">603.0 B | 2025-12-27 04:47:09</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">0d</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">3a27a4aad798e7a946b35d99bde8a85397484d</div>
+                <div style="color: #888; font-size: 0.9em;">177.0 B | 2025-12-27 04:47:08</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">17</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">2c4d4344a4e03129225fde9675bfdbc7843d4b</div>
+                <div style="color: #888; font-size: 0.9em;">199.0 B | 2025-12-27 04:47:10</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">18</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">3928652f48363d61a26eb5c84cccdcbd053b2a</div>
+                <div style="color: #888; font-size: 0.9em;">6.0 KB | 2025-12-27 04:47:08</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">1e</div>
+                <div style="color: #888; font-size: 0.9em;">(2 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">c2c0ed35149e7df167c5bcce95e0a957e5bd7f</div>
+                <div style="color: #888; font-size: 0.9em;">223.0 B | 2025-12-27 04:47:09</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">e279b545e39a8273949a390c0fec25a8c06955</div>
+                <div style="color: #888; font-size: 0.9em;">176.0 B | 2025-12-27 04:47:08</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">21</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">c803c12e796260b405e9814886fa7a39d3ac8d</div>
+                <div style="color: #888; font-size: 0.9em;">1.4 KB | 2025-12-27 04:47:02</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">22</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">834c26bbc80cb6674cfbdc166ad3f1dd6e9836</div>
+                <div style="color: #888; font-size: 0.9em;">3.1 KB | 2025-12-27 04:47:10</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">26</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">d87d85d905ebf872276849a6e1a91b55d4542b</div>
+                <div style="color: #888; font-size: 0.9em;">2.5 KB | 2025-12-27 04:47:08</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">29</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">9721c4556fcc8dfb18d3f464bb7befcd0735bb</div>
+                <div style="color: #888; font-size: 0.9em;">870.0 B | 2025-12-27 04:47:09</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">2b</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">4ee6b815705638f15fd8bb7b1f1fdf24984db5</div>
+                <div style="color: #888; font-size: 0.9em;">62.0 B | 2025-12-27 04:47:10</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">2e</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">f29566832c78014ba336d31f17630187ef1875</div>
+                <div style="color: #888; font-size: 0.9em;">182.0 B | 2025-12-27 04:47:08</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">31</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">d7f67f47aeae29a8093a6e0a31f0aab2e0ac39</div>
+                <div style="color: #888; font-size: 0.9em;">232.0 B | 2025-12-27 04:47:07</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">32</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">690116bd5f19e1fcbcf7c71bd54e7323371348</div>
+                <div style="color: #888; font-size: 0.9em;">272.0 B | 2025-12-27 04:47:09</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">33</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">df4ccfe1f5766e5c87b8536d742770402a9fd9</div>
+                <div style="color: #888; font-size: 0.9em;">701.0 B | 2025-12-27 04:47:08</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">34</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">bab3178cddc3b65e0e56f66da8f433d7b9d82a</div>
+                <div style="color: #888; font-size: 0.9em;">276.0 B | 2025-12-27 04:47:09</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">35</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">5a89dc2e1474883dbdd90e9feb4879747602e3</div>
+                <div style="color: #888; font-size: 0.9em;">114.0 B | 2025-12-27 04:47:06</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">3f</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">f767ec239349314ee078404866ef8b024538ac</div>
+                <div style="color: #888; font-size: 0.9em;">9.1 KB | 2025-12-27 04:47:09</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">44</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">0c35c24b0c5d3776e282cb1452ad01c7e82c63</div>
+                <div style="color: #888; font-size: 0.9em;">2.3 KB | 2025-12-27 04:47:09</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">4f</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">941986c860abafa18bf18556fe351462ae57bb</div>
+                <div style="color: #888; font-size: 0.9em;">1.2 KB | 2025-12-27 04:47:11</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">52</div>
+                <div style="color: #888; font-size: 0.9em;">(2 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">5eecf714493b998b84e79d617e8181108a1cc7</div>
+                <div style="color: #888; font-size: 0.9em;">179.0 B | 2025-12-27 04:47:08</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">d10f4899984eb9df9870adb5f4c9478be7c02b</div>
+                <div style="color: #888; font-size: 0.9em;">288.0 B | 2025-12-27 04:47:10</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">56</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">7d7a0608416b6ad07b1da5a58412e8490d2711</div>
+                <div style="color: #888; font-size: 0.9em;">254.0 B | 2025-12-27 04:47:09</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">58</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">4fd231b896087ed2baec695df50ca66e53c159</div>
+                <div style="color: #888; font-size: 0.9em;">147.0 B | 2025-12-27 04:47:09</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">5b</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">d20d4324f2f82f3c5c89a37a31f7c9dc87d0d3</div>
+                <div style="color: #888; font-size: 0.9em;">380.0 B | 2025-12-27 04:47:11</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">5c</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">b8c27d7eca35df74cf336418f4626c3b78a098</div>
+                <div style="color: #888; font-size: 0.9em;">178.0 B | 2025-12-27 04:47:08</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">5d</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">76317aa74a20d51547579dfd3cae6e7ba4d351</div>
+                <div style="color: #888; font-size: 0.9em;">3.4 KB | 2025-12-27 04:47:08</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">65</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">540214170eae84fb44f49cdf84d9deb7bd1e9e</div>
+                <div style="color: #888; font-size: 0.9em;">179.0 B | 2025-12-27 04:47:08</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">6c</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">502fee7e8082c179e21470fd25077d70e50aa8</div>
+                <div style="color: #888; font-size: 0.9em;">1.6 KB | 2025-12-27 04:47:11</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">6e</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">e990195edaf67d293be81db04e10fd96738dbb</div>
+                <div style="color: #888; font-size: 0.9em;">547.0 B | 2025-12-27 04:47:11</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">74</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">08478ab2a8b201f1324eeaabf4033960a9bbfb</div>
+                <div style="color: #888; font-size: 0.9em;">385.0 B | 2025-12-27 04:47:09</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">75</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">4a6230068c36376f394207f48b1e32aeaa96bd</div>
+                <div style="color: #888; font-size: 0.9em;">10.5 KB | 2025-12-27 04:47:10</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">77</div>
+                <div style="color: #888; font-size: 0.9em;">(2 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">123332af04074c4eb4d9593d6e945d2baff84b</div>
+                <div style="color: #888; font-size: 0.9em;">169.0 B | 2025-12-27 04:47:12</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">348940aa5420c03c143a230da08ea03ce09866</div>
+                <div style="color: #888; font-size: 0.9em;">5.3 KB | 2025-12-27 04:47:09</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">79</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">41825b31b5ae909001e1fa02ba29f7ff7e126f</div>
+                <div style="color: #888; font-size: 0.9em;">700.0 B | 2025-12-27 04:47:11</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">7a</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">60b85e148f80966a550e5ab6a762a907c69ca6</div>
+                <div style="color: #888; font-size: 0.9em;">33.0 B | 2025-12-27 04:46:49</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">7c</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">1d8bc430829bd2633d15798332abb80cd9ca8a</div>
+                <div style="color: #888; font-size: 0.9em;">334.0 B | 2025-12-27 04:47:07</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">7d</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">31ff5ae1fddfa52fd307b7f7e0a075797a9499</div>
+                <div style="color: #888; font-size: 0.9em;">1.4 KB | 2025-12-27 04:47:09</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">7f</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">4df8febfb2effa310e2ef76e105f03aeef8b2c</div>
+                <div style="color: #888; font-size: 0.9em;">3.6 KB | 2025-12-27 04:47:09</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">88</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">9ffc95cf9a1c17f62a48f060278f0c3c099f0c</div>
+                <div style="color: #888; font-size: 0.9em;">609.0 B | 2025-12-27 04:47:08</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">8e</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">67a1226321e07c6499ea71f305f5028743ef96</div>
+                <div style="color: #888; font-size: 0.9em;">180.0 B | 2025-12-27 04:47:08</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">8f</div>
+                <div style="color: #888; font-size: 0.9em;">(2 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">718f66dd1898ca4d8ca768ea7b3a249ad69efa</div>
+                <div style="color: #888; font-size: 0.9em;">3.7 KB | 2025-12-27 04:47:10</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">a538dbfb82d8cac6ebed9d78acf7dd0a30f3a3</div>
+                <div style="color: #888; font-size: 0.9em;">182.0 B | 2025-12-27 04:47:08</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">93</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">2d4744fe08c17d4de9b3206db857ae10126e02</div>
+                <div style="color: #888; font-size: 0.9em;">526.0 B | 2025-12-27 04:47:10</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">94</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">86fccb743210b0fc08dd3c3fda0b612d62c05c</div>
+                <div style="color: #888; font-size: 0.9em;">275.0 B | 2025-12-27 04:47:09</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">99</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">08c7f1f55e1e9f851559d9b0eec494571bf515</div>
+                <div style="color: #888; font-size: 0.9em;">5.2 KB | 2025-12-27 04:47:09</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">9c</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">a6eb813fa0d7dbcdd16f7c66fb63a89108920c</div>
+                <div style="color: #888; font-size: 0.9em;">13.1 KB | 2025-12-27 04:47:11</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">9f</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">2853696d3f77f4fb2dc4f70e979eddd59c6765</div>
+                <div style="color: #888; font-size: 0.9em;">134.0 B | 2025-12-27 04:47:08</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">a0</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">b2d3e9935c2bf4b83b49bbf522e4367ee5d90c</div>
+                <div style="color: #888; font-size: 0.9em;">131.0 B | 2025-12-27 04:47:08</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">a3</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">17491b2e52d9c7d56e76d9bee972b5b3cf679e</div>
+                <div style="color: #888; font-size: 0.9em;">23.1 KB | 2025-12-27 04:47:09</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">a5</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">a29916f2db5e0f6a8cca90df744643c30dc878</div>
+                <div style="color: #888; font-size: 0.9em;">28.3 KB | 2025-12-27 04:47:09</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">a6</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">ff04c9331d565d5c88f1d67d1ff4da8f8bd72a</div>
+                <div style="color: #888; font-size: 0.9em;">177.0 B | 2025-12-27 04:47:08</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">ad</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">d719d26a97fb161a7e547122f961493ee2299d</div>
+                <div style="color: #888; font-size: 0.9em;">318.0 B | 2025-12-27 04:46:49</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">b6</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">6ad97d28db7fb80360b60d6ecdab8a1faf1317</div>
+                <div style="color: #888; font-size: 0.9em;">132.0 B | 2025-12-27 04:47:00</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">b7</div>
+                <div style="color: #888; font-size: 0.9em;">(2 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">42ffcb9c1ee3a5db3bdf52bbf20f21f101a8a7</div>
+                <div style="color: #888; font-size: 0.9em;">196.0 B | 2025-12-27 04:47:08</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">8dcb269447ccb33787c92b9adc599117b373f7</div>
+                <div style="color: #888; font-size: 0.9em;">2.5 KB | 2025-12-27 04:47:11</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">b9</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">f66ccfe586ac0f06479b3b01f7d2e84e1d5b5a</div>
+                <div style="color: #888; font-size: 0.9em;">10.1 KB | 2025-12-27 04:47:08</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">c2</div>
+                <div style="color: #888; font-size: 0.9em;">(2 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">3c7a862d56eec8e3a4fdcf5930b846fab98f6f</div>
+                <div style="color: #888; font-size: 0.9em;">3.3 KB | 2025-12-27 04:47:09</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">ec4bf4646240d686761a7875afd4d458b1e944</div>
+                <div style="color: #888; font-size: 0.9em;">4.4 KB | 2025-12-27 04:47:09</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">c6</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">e9187de39ec31354b74aeaba9c3062d7249dbf</div>
+                <div style="color: #888; font-size: 0.9em;">4.3 KB | 2025-12-27 04:47:09</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">c7</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">6524ff07a89ffdf6631219864f2eba237e312a</div>
+                <div style="color: #888; font-size: 0.9em;">2.9 KB | 2025-12-27 04:47:09</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">cc</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">0f91ba42b3e9243491c93c585a5c8472c550d4</div>
+                <div style="color: #888; font-size: 0.9em;">764.0 B | 2025-12-27 04:47:11</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">cd</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">f165bc4eb40e40cc4f82806a5f9f528af990f3</div>
+                <div style="color: #888; font-size: 0.9em;">3.3 KB | 2025-12-27 04:47:09</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">d0</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">a7e7068fb41f37dd9879b64c100cc8c4712b78</div>
+                <div style="color: #888; font-size: 0.9em;">297.0 B | 2025-12-27 04:47:10</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">d1</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">0f4a586087848c68d3a3c54bf80787bdfa565a</div>
+                <div style="color: #888; font-size: 0.9em;">181.0 B | 2025-12-27 04:47:08</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">d9</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">5ba1e9754ee657688a992d2796ec972e3fc9a8</div>
+                <div style="color: #888; font-size: 0.9em;">4.4 KB | 2025-12-27 04:47:09</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">db</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">05d4b62ba18c11b1480f4ca5e42e2976e082b8</div>
+                <div style="color: #888; font-size: 0.9em;">34.9 KB | 2025-12-27 04:47:07</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">df</div>
+                <div style="color: #888; font-size: 0.9em;">(2 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">31ff05c78a92423b7f4ca53e6516b0c03b6a5e</div>
+                <div style="color: #888; font-size: 0.9em;">1.7 KB | 2025-12-27 04:47:12</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">c4f72882f204d72fa1f3654ded31649f63a398</div>
+                <div style="color: #888; font-size: 0.9em;">15.7 KB | 2025-12-27 04:47:08</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">e6</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">1f2258a849a2acf56c4e300017afd99baa6b95</div>
+                <div style="color: #888; font-size: 0.9em;">135.0 B | 2025-12-27 04:47:12</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">e7</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">83764b7be433a95624fd42dae9be98579436f5</div>
+                <div style="color: #888; font-size: 0.9em;">31.0 B | 2025-12-27 04:47:08</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">e9</div>
+                <div style="color: #888; font-size: 0.9em;">(2 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">079328c942f527d0a4e4d7cc94f46cfbd3e6e9</div>
+                <div style="color: #888; font-size: 0.9em;">344.0 B | 2025-12-27 04:47:10</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">5a68c9c734a98779cd49417d276f0d2ec8870c</div>
+                <div style="color: #888; font-size: 0.9em;">4.4 KB | 2025-12-27 04:47:11</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">ec</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">47853082f5d04e7b5304256bbf32e28e18eee0</div>
+                <div style="color: #888; font-size: 0.9em;">2.2 KB | 2025-12-27 04:47:08</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">ee</div>
+                <div style="color: #888; font-size: 0.9em;">(2 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">2afc0267aff837b250f2f875a95ac37b23b401</div>
+                <div style="color: #888; font-size: 0.9em;">12.9 KB | 2025-12-27 04:47:09</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">af3638b8b26d5906c20695b14c5133b9826a57</div>
+                <div style="color: #888; font-size: 0.9em;">1.6 KB | 2025-12-27 04:47:09</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">f1</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">adbf19717ccb9832a4248038c92242423d29d0</div>
+                <div style="color: #888; font-size: 0.9em;">683.0 B | 2025-12-27 04:47:08</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">f4</div>
+                <div style="color: #888; font-size: 0.9em;">(3 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">11eeccf5b85eaadc32914af18409579aa12fbb</div>
+                <div style="color: #888; font-size: 0.9em;">1.1 KB | 2025-12-27 04:47:08</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">d49a5de26f016b69c8d78e0031a6c0c35d8230</div>
+                <div style="color: #888; font-size: 0.9em;">3.6 KB | 2025-12-27 04:47:08</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dfbf70bf01dcc9a51af64da1eb07d5cc9afc7d</div>
+                <div style="color: #888; font-size: 0.9em;">4.5 KB | 2025-12-27 04:47:09</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">fc</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">d46c74ad57b0eee18045546cd21ec718712d7d</div>
+                <div style="color: #888; font-size: 0.9em;">1.9 KB | 2025-12-27 04:47:09</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">ff</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">d68b95ace02114540723418e27c55089071898</div>
+                <div style="color: #888; font-size: 0.9em;">184.0 B | 2025-12-27 04:47:08</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">info</div>
+                <div style="color: #888; font-size: 0.9em;">(0 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">pack</div>
+                <div style="color: #888; font-size: 0.9em;">(0 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-2">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">refs</div>
+                <div style="color: #888; font-size: 0.9em;">(2 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">heads</div>
+                <div style="color: #888; font-size: 0.9em;">(0 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">tags</div>
+                <div style="color: #888; font-size: 0.9em;">(0 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">.vecta_snapshots</div>
+                <div style="color: #888; font-size: 0.9em;">(4 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-2">
+            <span class="file-icon json">📊</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">config.json</div>
+                <div style="color: #888; font-size: 0.9em;">717.0 B | 2025-12-26 03:30:07</div>
+            </div>
+        </div>
+        <div class="file-item level-2">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">snap_20251226_021319</div>
+                <div style="color: #888; font-size: 0.9em;">(42 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">analizar_carpeta.py</div>
+                <div style="color: #888; font-size: 0.9em;">9.4 KB | 2025-12-25 20:37:01</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">auto_implementar_vecta.py</div>
+                <div style="color: #888; font-size: 0.9em;">132.1 KB | 2025-12-26 02:08:50</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon bat">⚙️</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">auto_snapshot.bat</div>
+                <div style="color: #888; font-size: 0.9em;">346.0 B | 2025-12-25 23:16:42</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">crear_vector.py</div>
+                <div style="color: #888; font-size: 0.9em;">10.8 KB | 2025-12-25 17:39:17</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">crear_zip.py</div>
+                <div style="color: #888; font-size: 0.9em;">1.1 KB | 2025-12-25 14:43:19</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">create_vecta_package.py</div>
+                <div style="color: #888; font-size: 0.9em;">5.6 KB | 2025-12-25 14:29:47</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">generar_reporte_completo.py</div>
+                <div style="color: #888; font-size: 0.9em;">9.9 KB | 2025-12-25 23:07:27</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon bat">⚙️</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">INSTALAR.bat</div>
+                <div style="color: #888; font-size: 0.9em;">434.0 B | 2025-12-25 16:32:58</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">instalar_sistema_snapshot.py</div>
+                <div style="color: #888; font-size: 0.9em;">21.8 KB | 2025-12-25 22:45:08</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">integrar_meta_vecta.py</div>
+                <div style="color: #888; font-size: 0.9em;">49.2 KB | 2025-12-25 18:52:49</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon json">📊</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">metadata.json</div>
+                <div style="color: #888; font-size: 0.9em;">152.0 B | 2025-12-26 02:13:26</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">módulo.py</div>
+                <div style="color: #888; font-size: 0.9em;">360.0 B | 2025-12-26 01:36:31</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">prueba_simple.py</div>
+                <div style="color: #888; font-size: 0.9em;">366.0 B | 2025-12-26 01:34:58</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">prueba_vecta.py</div>
+                <div style="color: #888; font-size: 0.9em;">448.0 B | 2025-12-25 16:47:37</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">python fix_simple.py</div>
+                <div style="color: #888; font-size: 0.9em;">453.0 B | 2025-12-25 19:32:26</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon txt">📝</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">README_VECTA_CHAT.md</div>
+                <div style="color: #888; font-size: 0.9em;">458.0 B | 2025-12-26 00:12:42</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon json">📊</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">registro_incorporacion.json</div>
+                <div style="color: #888; font-size: 0.9em;">301.0 B | 2025-12-25 18:53:47</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">reparar_menu.py</div>
+                <div style="color: #888; font-size: 0.9em;">9.3 KB | 2025-12-25 19:04:45</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">reparar_opcion6.py</div>
+                <div style="color: #888; font-size: 0.9em;">14.4 KB | 2025-12-25 19:14:44</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">reparar_vecta.py</div>
+                <div style="color: #888; font-size: 0.9em;">10.4 KB | 2025-12-25 18:12:36</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon json">📊</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">reporte_carpeta.json</div>
+                <div style="color: #888; font-size: 0.9em;">107.3 KB | 2025-12-25 20:38:35</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon txt">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">reporte_compacto.txt</div>
+                <div style="color: #888; font-size: 0.9em;">3.9 KB | 2025-12-25 23:09:27</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon txt">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">reporte_vecta.txt</div>
+                <div style="color: #888; font-size: 0.9em;">687.0 B | 2025-12-25 22:58:51</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon txt">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">reporte_vecta_20251225_230927.txt</div>
+                <div style="color: #888; font-size: 0.9em;">12.6 KB | 2025-12-25 23:09:27</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon txt">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">RESUMEN_INSTALACION.txt</div>
+                <div style="color: #888; font-size: 0.9em;">1.1 KB | 2025-12-25 22:46:10</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon bat">⚙️</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">setup_vecta_chat.bat</div>
+                <div style="color: #888; font-size: 0.9em;">1.2 KB | 2025-12-26 00:11:17</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_12d_launcher.py</div>
+                <div style="color: #888; font-size: 0.9em;">4.4 KB | 2025-12-25 16:40:23</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_ai_chat.py</div>
+                <div style="color: #888; font-size: 0.9em;">85.8 KB | 2025-12-26 01:20:04</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_ai_snapshot.py</div>
+                <div style="color: #888; font-size: 0.9em;">32.1 KB | 2025-12-25 22:23:20</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_auto.py</div>
+                <div style="color: #888; font-size: 0.9em;">2.1 KB | 2025-12-25 22:46:10</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_auto_build.py</div>
+                <div style="color: #888; font-size: 0.9em;">45.7 KB | 2025-12-25 16:06:49</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_corregido.py</div>
+                <div style="color: #888; font-size: 0.9em;">20.7 KB | 2025-12-25 16:30:46</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_launcher.py</div>
+                <div style="color: #888; font-size: 0.9em;">13.7 KB | 2025-12-25 23:14:42</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_learner.py</div>
+                <div style="color: #888; font-size: 0.9em;">5.9 KB | 2025-12-26 01:20:35</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_self_install.py</div>
+                <div style="color: #888; font-size: 0.9em;">9.7 KB | 2025-12-25 14:07:53</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_simple.py</div>
+                <div style="color: #888; font-size: 0.9em;">20.2 KB | 2025-12-25 16:15:03</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_snapshot_system.py</div>
+                <div style="color: #888; font-size: 0.9em;">8.0 KB | 2025-12-25 22:46:07</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vector_12d.py</div>
+                <div style="color: #888; font-size: 0.9em;">10.2 KB | 2025-12-25 17:28:47</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">verificar.py</div>
+                <div style="color: #888; font-size: 0.9em;">1.3 KB | 2025-12-25 14:59:55</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">chat_data</div>
+                <div style="color: #888; font-size: 0.9em;">(2 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">learning</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-5">
+            <span class="file-icon json">📊</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">learned_patterns.json</div>
+                <div style="color: #888; font-size: 0.9em;">1012.0 B | 2025-12-26 01:36:31</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">sessions</div>
+                <div style="color: #888; font-size: 0.9em;">(4 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-5">
+            <span class="file-icon json">📊</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">session_2833e325.json</div>
+                <div style="color: #888; font-size: 0.9em;">6.2 KB | 2025-12-26 01:32:01</div>
+            </div>
+        </div>
+        <div class="file-item level-5">
+            <span class="file-icon json">📊</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">session_2c4efc52.json</div>
+                <div style="color: #888; font-size: 0.9em;">1.7 KB | 2025-12-26 01:13:58</div>
+            </div>
+        </div>
+        <div class="file-item level-5">
+            <span class="file-icon json">📊</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">session_45425cce.json</div>
+                <div style="color: #888; font-size: 0.9em;">30.6 KB | 2025-12-26 01:02:59</div>
+            </div>
+        </div>
+        <div class="file-item level-5">
+            <span class="file-icon json">📊</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">session_fbddbfbc.json</div>
+                <div style="color: #888; font-size: 0.9em;">8.4 KB | 2025-12-26 02:09:40</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">core</div>
+                <div style="color: #888; font-size: 0.9em;">(4 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">config_manager.py</div>
+                <div style="color: #888; font-size: 0.9em;">139.0 B | 2025-12-25 16:32:58</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">meta_vecta.py</div>
+                <div style="color: #888; font-size: 0.9em;">31.6 KB | 2025-12-25 18:53:45</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_12d_core.py</div>
+                <div style="color: #888; font-size: 0.9em;">1.7 KB | 2025-12-25 16:32:58</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">__init__.py</div>
+                <div style="color: #888; font-size: 0.9em;">16.0 B | 2025-12-25 16:32:58</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimensiones</div>
+                <div style="color: #888; font-size: 0.9em;">(13 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_1.py</div>
+                <div style="color: #888; font-size: 0.9em;">316.0 B | 2025-12-25 16:32:58</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_10.py</div>
+                <div style="color: #888; font-size: 0.9em;">288.0 B | 2025-12-25 16:32:58</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_11.py</div>
+                <div style="color: #888; font-size: 0.9em;">273.0 B | 2025-12-25 16:32:58</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_12.py</div>
+                <div style="color: #888; font-size: 0.9em;">288.0 B | 2025-12-25 16:32:58</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_2.py</div>
+                <div style="color: #888; font-size: 0.9em;">269.0 B | 2025-12-25 16:32:58</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_3.py</div>
+                <div style="color: #888; font-size: 0.9em;">275.0 B | 2025-12-25 16:32:58</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_4.py</div>
+                <div style="color: #888; font-size: 0.9em;">284.0 B | 2025-12-25 16:32:58</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_5.py</div>
+                <div style="color: #888; font-size: 0.9em;">281.0 B | 2025-12-25 16:32:58</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_6.py</div>
+                <div style="color: #888; font-size: 0.9em;">284.0 B | 2025-12-25 16:32:58</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_7.py</div>
+                <div style="color: #888; font-size: 0.9em;">290.0 B | 2025-12-25 16:32:58</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_8.py</div>
+                <div style="color: #888; font-size: 0.9em;">290.0 B | 2025-12-25 16:32:58</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_9.py</div>
+                <div style="color: #888; font-size: 0.9em;">272.0 B | 2025-12-25 16:32:58</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vector_12d.py</div>
+                <div style="color: #888; font-size: 0.9em;">3.3 KB | 2025-12-25 18:13:35</div>
+            </div>
+        </div>
+        <div class="file-item level-2">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">snap_20251226_032537</div>
+                <div style="color: #888; font-size: 0.9em;">(46 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">analizar_carpeta.py</div>
+                <div style="color: #888; font-size: 0.9em;">9.4 KB | 2025-12-25 20:37:01</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">auto_implementar_vecta.py</div>
+                <div style="color: #888; font-size: 0.9em;">132.1 KB | 2025-12-26 03:18:52</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">auto_implementar_vecta_backup.py</div>
+                <div style="color: #888; font-size: 0.9em;">132.1 KB | 2025-12-26 03:00:58</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon bat">⚙️</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">auto_snapshot.bat</div>
+                <div style="color: #888; font-size: 0.9em;">346.0 B | 2025-12-25 23:16:42</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">correccion_simple.py</div>
+                <div style="color: #888; font-size: 0.9em;">1.6 KB | 2025-12-26 03:18:08</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">corregir_indentacion.py</div>
+                <div style="color: #888; font-size: 0.9em;">7.5 KB | 2025-12-26 03:14:38</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">crear_vector.py</div>
+                <div style="color: #888; font-size: 0.9em;">10.8 KB | 2025-12-25 17:39:17</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">crear_zip.py</div>
+                <div style="color: #888; font-size: 0.9em;">1.1 KB | 2025-12-25 14:43:19</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">create_vecta_package.py</div>
+                <div style="color: #888; font-size: 0.9em;">5.6 KB | 2025-12-25 14:29:47</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">generar_reporte_completo.py</div>
+                <div style="color: #888; font-size: 0.9em;">9.9 KB | 2025-12-25 23:07:27</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon bat">⚙️</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">INSTALAR.bat</div>
+                <div style="color: #888; font-size: 0.9em;">434.0 B | 2025-12-25 16:32:58</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">instalar_sistema_snapshot.py</div>
+                <div style="color: #888; font-size: 0.9em;">21.8 KB | 2025-12-25 22:45:08</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">integrar_meta_vecta.py</div>
+                <div style="color: #888; font-size: 0.9em;">49.2 KB | 2025-12-25 18:52:49</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon json">📊</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">metadata.json</div>
+                <div style="color: #888; font-size: 0.9em;">126.0 B | 2025-12-26 03:25:41</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">módulo.py</div>
+                <div style="color: #888; font-size: 0.9em;">360.0 B | 2025-12-26 01:36:31</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">prueba_simple.py</div>
+                <div style="color: #888; font-size: 0.9em;">366.0 B | 2025-12-26 01:34:58</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">prueba_vecta.py</div>
+                <div style="color: #888; font-size: 0.9em;">448.0 B | 2025-12-25 16:47:37</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">python fix_simple.py</div>
+                <div style="color: #888; font-size: 0.9em;">453.0 B | 2025-12-25 19:32:26</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon txt">📝</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">README_VECTA_CHAT.md</div>
+                <div style="color: #888; font-size: 0.9em;">458.0 B | 2025-12-26 00:12:42</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon json">📊</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">registro_incorporacion.json</div>
+                <div style="color: #888; font-size: 0.9em;">301.0 B | 2025-12-25 18:53:47</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">reparar_menu.py</div>
+                <div style="color: #888; font-size: 0.9em;">9.3 KB | 2025-12-25 19:04:45</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">reparar_opcion6.py</div>
+                <div style="color: #888; font-size: 0.9em;">14.4 KB | 2025-12-25 19:14:44</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">reparar_vecta.py</div>
+                <div style="color: #888; font-size: 0.9em;">10.4 KB | 2025-12-25 18:12:36</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon json">📊</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">reporte_carpeta.json</div>
+                <div style="color: #888; font-size: 0.9em;">107.3 KB | 2025-12-25 20:38:35</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon txt">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">reporte_compacto.txt</div>
+                <div style="color: #888; font-size: 0.9em;">4.0 KB | 2025-12-26 02:21:12</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon txt">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">reporte_vecta.txt</div>
+                <div style="color: #888; font-size: 0.9em;">687.0 B | 2025-12-25 22:58:51</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon txt">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">reporte_vecta_20251225_230927.txt</div>
+                <div style="color: #888; font-size: 0.9em;">12.6 KB | 2025-12-25 23:09:27</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon txt">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">reporte_vecta_20251226_022112.txt</div>
+                <div style="color: #888; font-size: 0.9em;">12.7 KB | 2025-12-26 02:21:12</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon txt">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">RESUMEN_INSTALACION.txt</div>
+                <div style="color: #888; font-size: 0.9em;">1.1 KB | 2025-12-25 22:46:10</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon bat">⚙️</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">setup_vecta_chat.bat</div>
+                <div style="color: #888; font-size: 0.9em;">1.2 KB | 2025-12-26 00:11:17</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_12d_launcher.py</div>
+                <div style="color: #888; font-size: 0.9em;">4.4 KB | 2025-12-25 16:40:23</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_ai_chat.py</div>
+                <div style="color: #888; font-size: 0.9em;">85.8 KB | 2025-12-26 01:20:04</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_ai_snapshot.py</div>
+                <div style="color: #888; font-size: 0.9em;">32.1 KB | 2025-12-25 22:23:20</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_auto.py</div>
+                <div style="color: #888; font-size: 0.9em;">2.1 KB | 2025-12-25 22:46:10</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_auto_build.py</div>
+                <div style="color: #888; font-size: 0.9em;">45.7 KB | 2025-12-25 16:06:49</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_corregido.py</div>
+                <div style="color: #888; font-size: 0.9em;">20.7 KB | 2025-12-25 16:30:46</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_launcher.py</div>
+                <div style="color: #888; font-size: 0.9em;">13.7 KB | 2025-12-25 23:14:42</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_learner.py</div>
+                <div style="color: #888; font-size: 0.9em;">5.9 KB | 2025-12-26 01:20:35</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_self_install.py</div>
+                <div style="color: #888; font-size: 0.9em;">9.7 KB | 2025-12-25 14:07:53</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_simple.py</div>
+                <div style="color: #888; font-size: 0.9em;">20.2 KB | 2025-12-25 16:15:03</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_snapshot_system.py</div>
+                <div style="color: #888; font-size: 0.9em;">8.0 KB | 2025-12-25 22:46:07</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vector_12d.py</div>
+                <div style="color: #888; font-size: 0.9em;">10.2 KB | 2025-12-25 17:28:47</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">verificar.py</div>
+                <div style="color: #888; font-size: 0.9em;">1.3 KB | 2025-12-25 14:59:55</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">chat_data</div>
+                <div style="color: #888; font-size: 0.9em;">(2 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">learning</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-5">
+            <span class="file-icon json">📊</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">learned_patterns.json</div>
+                <div style="color: #888; font-size: 0.9em;">1012.0 B | 2025-12-26 01:36:31</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">sessions</div>
+                <div style="color: #888; font-size: 0.9em;">(4 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-5">
+            <span class="file-icon json">📊</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">session_2833e325.json</div>
+                <div style="color: #888; font-size: 0.9em;">6.2 KB | 2025-12-26 01:32:01</div>
+            </div>
+        </div>
+        <div class="file-item level-5">
+            <span class="file-icon json">📊</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">session_2c4efc52.json</div>
+                <div style="color: #888; font-size: 0.9em;">1.7 KB | 2025-12-26 01:13:58</div>
+            </div>
+        </div>
+        <div class="file-item level-5">
+            <span class="file-icon json">📊</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">session_45425cce.json</div>
+                <div style="color: #888; font-size: 0.9em;">30.6 KB | 2025-12-26 01:02:59</div>
+            </div>
+        </div>
+        <div class="file-item level-5">
+            <span class="file-icon json">📊</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">session_fbddbfbc.json</div>
+                <div style="color: #888; font-size: 0.9em;">8.4 KB | 2025-12-26 02:09:40</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">core</div>
+                <div style="color: #888; font-size: 0.9em;">(4 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">config_manager.py</div>
+                <div style="color: #888; font-size: 0.9em;">139.0 B | 2025-12-25 16:32:58</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">meta_vecta.py</div>
+                <div style="color: #888; font-size: 0.9em;">31.6 KB | 2025-12-25 18:53:45</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_12d_core.py</div>
+                <div style="color: #888; font-size: 0.9em;">1.7 KB | 2025-12-25 16:32:58</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">__init__.py</div>
+                <div style="color: #888; font-size: 0.9em;">16.0 B | 2025-12-25 16:32:58</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimensiones</div>
+                <div style="color: #888; font-size: 0.9em;">(13 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_1.py</div>
+                <div style="color: #888; font-size: 0.9em;">316.0 B | 2025-12-25 16:32:58</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_10.py</div>
+                <div style="color: #888; font-size: 0.9em;">288.0 B | 2025-12-25 16:32:58</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_11.py</div>
+                <div style="color: #888; font-size: 0.9em;">273.0 B | 2025-12-25 16:32:58</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_12.py</div>
+                <div style="color: #888; font-size: 0.9em;">288.0 B | 2025-12-25 16:32:58</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_2.py</div>
+                <div style="color: #888; font-size: 0.9em;">269.0 B | 2025-12-25 16:32:58</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_3.py</div>
+                <div style="color: #888; font-size: 0.9em;">275.0 B | 2025-12-25 16:32:58</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_4.py</div>
+                <div style="color: #888; font-size: 0.9em;">284.0 B | 2025-12-25 16:32:58</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_5.py</div>
+                <div style="color: #888; font-size: 0.9em;">281.0 B | 2025-12-25 16:32:58</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_6.py</div>
+                <div style="color: #888; font-size: 0.9em;">284.0 B | 2025-12-25 16:32:58</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_7.py</div>
+                <div style="color: #888; font-size: 0.9em;">290.0 B | 2025-12-25 16:32:58</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_8.py</div>
+                <div style="color: #888; font-size: 0.9em;">290.0 B | 2025-12-25 16:32:58</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_9.py</div>
+                <div style="color: #888; font-size: 0.9em;">272.0 B | 2025-12-25 16:32:58</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vector_12d.py</div>
+                <div style="color: #888; font-size: 0.9em;">3.3 KB | 2025-12-25 18:13:35</div>
+            </div>
+        </div>
+        <div class="file-item level-2">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">snap_20251226_033004</div>
+                <div style="color: #888; font-size: 0.9em;">(46 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">analizar_carpeta.py</div>
+                <div style="color: #888; font-size: 0.9em;">9.4 KB | 2025-12-25 20:37:01</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">auto_implementar_vecta.py</div>
+                <div style="color: #888; font-size: 0.9em;">132.1 KB | 2025-12-26 03:18:52</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">auto_implementar_vecta_backup.py</div>
+                <div style="color: #888; font-size: 0.9em;">132.1 KB | 2025-12-26 03:00:58</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon bat">⚙️</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">auto_snapshot.bat</div>
+                <div style="color: #888; font-size: 0.9em;">346.0 B | 2025-12-25 23:16:42</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">correccion_simple.py</div>
+                <div style="color: #888; font-size: 0.9em;">1.6 KB | 2025-12-26 03:18:08</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">corregir_indentacion.py</div>
+                <div style="color: #888; font-size: 0.9em;">7.5 KB | 2025-12-26 03:14:38</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">crear_vector.py</div>
+                <div style="color: #888; font-size: 0.9em;">10.8 KB | 2025-12-25 17:39:17</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">crear_zip.py</div>
+                <div style="color: #888; font-size: 0.9em;">1.1 KB | 2025-12-25 14:43:19</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">create_vecta_package.py</div>
+                <div style="color: #888; font-size: 0.9em;">5.6 KB | 2025-12-25 14:29:47</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">generar_reporte_completo.py</div>
+                <div style="color: #888; font-size: 0.9em;">9.9 KB | 2025-12-25 23:07:27</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon bat">⚙️</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">INSTALAR.bat</div>
+                <div style="color: #888; font-size: 0.9em;">434.0 B | 2025-12-25 16:32:58</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">instalar_sistema_snapshot.py</div>
+                <div style="color: #888; font-size: 0.9em;">21.8 KB | 2025-12-25 22:45:08</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">integrar_meta_vecta.py</div>
+                <div style="color: #888; font-size: 0.9em;">49.2 KB | 2025-12-25 18:52:49</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon json">📊</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">metadata.json</div>
+                <div style="color: #888; font-size: 0.9em;">144.0 B | 2025-12-26 03:30:07</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">módulo.py</div>
+                <div style="color: #888; font-size: 0.9em;">360.0 B | 2025-12-26 01:36:31</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">prueba_simple.py</div>
+                <div style="color: #888; font-size: 0.9em;">366.0 B | 2025-12-26 01:34:58</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">prueba_vecta.py</div>
+                <div style="color: #888; font-size: 0.9em;">448.0 B | 2025-12-25 16:47:37</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">python fix_simple.py</div>
+                <div style="color: #888; font-size: 0.9em;">453.0 B | 2025-12-25 19:32:26</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon txt">📝</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">README_VECTA_CHAT.md</div>
+                <div style="color: #888; font-size: 0.9em;">458.0 B | 2025-12-26 00:12:42</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon json">📊</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">registro_incorporacion.json</div>
+                <div style="color: #888; font-size: 0.9em;">301.0 B | 2025-12-25 18:53:47</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">reparar_menu.py</div>
+                <div style="color: #888; font-size: 0.9em;">9.3 KB | 2025-12-25 19:04:45</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">reparar_opcion6.py</div>
+                <div style="color: #888; font-size: 0.9em;">14.4 KB | 2025-12-25 19:14:44</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">reparar_vecta.py</div>
+                <div style="color: #888; font-size: 0.9em;">10.4 KB | 2025-12-25 18:12:36</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon json">📊</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">reporte_carpeta.json</div>
+                <div style="color: #888; font-size: 0.9em;">107.3 KB | 2025-12-25 20:38:35</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon txt">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">reporte_compacto.txt</div>
+                <div style="color: #888; font-size: 0.9em;">4.0 KB | 2025-12-26 02:21:12</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon txt">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">reporte_vecta.txt</div>
+                <div style="color: #888; font-size: 0.9em;">687.0 B | 2025-12-25 22:58:51</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon txt">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">reporte_vecta_20251225_230927.txt</div>
+                <div style="color: #888; font-size: 0.9em;">12.6 KB | 2025-12-25 23:09:27</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon txt">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">reporte_vecta_20251226_022112.txt</div>
+                <div style="color: #888; font-size: 0.9em;">12.7 KB | 2025-12-26 02:21:12</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon txt">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">RESUMEN_INSTALACION.txt</div>
+                <div style="color: #888; font-size: 0.9em;">1.1 KB | 2025-12-25 22:46:10</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon bat">⚙️</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">setup_vecta_chat.bat</div>
+                <div style="color: #888; font-size: 0.9em;">1.2 KB | 2025-12-26 00:11:17</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_12d_launcher.py</div>
+                <div style="color: #888; font-size: 0.9em;">4.4 KB | 2025-12-25 16:40:23</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_ai_chat.py</div>
+                <div style="color: #888; font-size: 0.9em;">85.8 KB | 2025-12-26 01:20:04</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_ai_snapshot.py</div>
+                <div style="color: #888; font-size: 0.9em;">32.1 KB | 2025-12-25 22:23:20</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_auto.py</div>
+                <div style="color: #888; font-size: 0.9em;">2.1 KB | 2025-12-25 22:46:10</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_auto_build.py</div>
+                <div style="color: #888; font-size: 0.9em;">45.7 KB | 2025-12-25 16:06:49</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_corregido.py</div>
+                <div style="color: #888; font-size: 0.9em;">20.7 KB | 2025-12-25 16:30:46</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_launcher.py</div>
+                <div style="color: #888; font-size: 0.9em;">13.7 KB | 2025-12-25 23:14:42</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_learner.py</div>
+                <div style="color: #888; font-size: 0.9em;">5.9 KB | 2025-12-26 01:20:35</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_self_install.py</div>
+                <div style="color: #888; font-size: 0.9em;">9.7 KB | 2025-12-25 14:07:53</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_simple.py</div>
+                <div style="color: #888; font-size: 0.9em;">20.2 KB | 2025-12-25 16:15:03</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_snapshot_system.py</div>
+                <div style="color: #888; font-size: 0.9em;">8.0 KB | 2025-12-25 22:46:07</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vector_12d.py</div>
+                <div style="color: #888; font-size: 0.9em;">10.2 KB | 2025-12-25 17:28:47</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">verificar.py</div>
+                <div style="color: #888; font-size: 0.9em;">1.3 KB | 2025-12-25 14:59:55</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">chat_data</div>
+                <div style="color: #888; font-size: 0.9em;">(2 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">learning</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-5">
+            <span class="file-icon json">📊</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">learned_patterns.json</div>
+                <div style="color: #888; font-size: 0.9em;">1012.0 B | 2025-12-26 01:36:31</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">sessions</div>
+                <div style="color: #888; font-size: 0.9em;">(4 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-5">
+            <span class="file-icon json">📊</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">session_2833e325.json</div>
+                <div style="color: #888; font-size: 0.9em;">6.2 KB | 2025-12-26 01:32:01</div>
+            </div>
+        </div>
+        <div class="file-item level-5">
+            <span class="file-icon json">📊</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">session_2c4efc52.json</div>
+                <div style="color: #888; font-size: 0.9em;">1.7 KB | 2025-12-26 01:13:58</div>
+            </div>
+        </div>
+        <div class="file-item level-5">
+            <span class="file-icon json">📊</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">session_45425cce.json</div>
+                <div style="color: #888; font-size: 0.9em;">30.6 KB | 2025-12-26 01:02:59</div>
+            </div>
+        </div>
+        <div class="file-item level-5">
+            <span class="file-icon json">📊</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">session_fbddbfbc.json</div>
+                <div style="color: #888; font-size: 0.9em;">8.4 KB | 2025-12-26 02:09:40</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">core</div>
+                <div style="color: #888; font-size: 0.9em;">(4 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">config_manager.py</div>
+                <div style="color: #888; font-size: 0.9em;">139.0 B | 2025-12-25 16:32:58</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">meta_vecta.py</div>
+                <div style="color: #888; font-size: 0.9em;">31.6 KB | 2025-12-25 18:53:45</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_12d_core.py</div>
+                <div style="color: #888; font-size: 0.9em;">1.7 KB | 2025-12-25 16:32:58</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">__init__.py</div>
+                <div style="color: #888; font-size: 0.9em;">16.0 B | 2025-12-25 16:32:58</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimensiones</div>
+                <div style="color: #888; font-size: 0.9em;">(13 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_1.py</div>
+                <div style="color: #888; font-size: 0.9em;">316.0 B | 2025-12-25 16:32:58</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_10.py</div>
+                <div style="color: #888; font-size: 0.9em;">288.0 B | 2025-12-25 16:32:58</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_11.py</div>
+                <div style="color: #888; font-size: 0.9em;">273.0 B | 2025-12-25 16:32:58</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_12.py</div>
+                <div style="color: #888; font-size: 0.9em;">288.0 B | 2025-12-25 16:32:58</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_2.py</div>
+                <div style="color: #888; font-size: 0.9em;">269.0 B | 2025-12-25 16:32:58</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_3.py</div>
+                <div style="color: #888; font-size: 0.9em;">275.0 B | 2025-12-25 16:32:58</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_4.py</div>
+                <div style="color: #888; font-size: 0.9em;">284.0 B | 2025-12-25 16:32:58</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_5.py</div>
+                <div style="color: #888; font-size: 0.9em;">281.0 B | 2025-12-25 16:32:58</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_6.py</div>
+                <div style="color: #888; font-size: 0.9em;">284.0 B | 2025-12-25 16:32:58</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_7.py</div>
+                <div style="color: #888; font-size: 0.9em;">290.0 B | 2025-12-25 16:32:58</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_8.py</div>
+                <div style="color: #888; font-size: 0.9em;">290.0 B | 2025-12-25 16:32:58</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_9.py</div>
+                <div style="color: #888; font-size: 0.9em;">272.0 B | 2025-12-25 16:32:58</div>
+            </div>
+        </div>
+        <div class="file-item level-4">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vector_12d.py</div>
+                <div style="color: #888; font-size: 0.9em;">3.3 KB | 2025-12-25 18:13:35</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">chat_data</div>
+                <div style="color: #888; font-size: 0.9em;">(5 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-2">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">auto_implementacion</div>
+                <div style="color: #888; font-size: 0.9em;">(2 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon json">📊</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">diagnosis.json</div>
+                <div style="color: #888; font-size: 0.9em;">1.3 KB | 2025-12-26 21:18:36</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon json">📊</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">install_config.json</div>
+                <div style="color: #888; font-size: 0.9em;">836.0 B | 2025-12-26 21:18:36</div>
+            </div>
+        </div>
+        <div class="file-item level-2">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">backups</div>
+                <div style="color: #888; font-size: 0.9em;">(0 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-2">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">learning</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon json">📊</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">learned_patterns.json</div>
+                <div style="color: #888; font-size: 0.9em;">1.4 KB | 2025-12-26 21:37:26</div>
+            </div>
+        </div>
+        <div class="file-item level-2">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">logs</div>
+                <div style="color: #888; font-size: 0.9em;">(1 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_chat_20251226.log</div>
+                <div style="color: #888; font-size: 0.9em;">121.1 KB | 2025-12-26 21:52:40</div>
+            </div>
+        </div>
+        <div class="file-item level-2">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">sessions</div>
+                <div style="color: #888; font-size: 0.9em;">(5 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon json">📊</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">session_2740dba8.json</div>
+                <div style="color: #888; font-size: 0.9em;">2.7 KB | 2025-12-26 21:52:40</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon json">📊</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">session_2833e325.json</div>
+                <div style="color: #888; font-size: 0.9em;">6.2 KB | 2025-12-26 01:32:01</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon json">📊</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">session_2c4efc52.json</div>
+                <div style="color: #888; font-size: 0.9em;">1.7 KB | 2025-12-26 01:13:58</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon json">📊</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">session_45425cce.json</div>
+                <div style="color: #888; font-size: 0.9em;">30.6 KB | 2025-12-26 01:02:59</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon json">📊</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">session_fbddbfbc.json</div>
+                <div style="color: #888; font-size: 0.9em;">8.4 KB | 2025-12-26 02:09:40</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">core</div>
+                <div style="color: #888; font-size: 0.9em;">(5 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-2">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">config_manager.py</div>
+                <div style="color: #888; font-size: 0.9em;">141.0 B | 2025-12-27 01:19:43</div>
+            </div>
+        </div>
+        <div class="file-item level-2">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">meta_vecta.py</div>
+                <div style="color: #888; font-size: 0.9em;">4.7 KB | 2025-12-27 01:19:43</div>
+            </div>
+        </div>
+        <div class="file-item level-2">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_12d_core.py</div>
+                <div style="color: #888; font-size: 0.9em;">300.0 B | 2025-12-27 01:19:43</div>
+            </div>
+        </div>
+        <div class="file-item level-2">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">__init__.py</div>
+                <div style="color: #888; font-size: 0.9em;">262.0 B | 2025-12-27 01:33:58</div>
+            </div>
+        </div>
+        <div class="file-item level-2">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">__pycache__</div>
+                <div style="color: #888; font-size: 0.9em;">(4 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">config_manager.cpython-313.pyc</div>
+                <div style="color: #888; font-size: 0.9em;">637.0 B | 2025-12-27 01:34:23</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">meta_vecta.cpython-313.pyc</div>
+                <div style="color: #888; font-size: 0.9em;">6.3 KB | 2025-12-27 01:25:45</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_12d_core.cpython-313.pyc</div>
+                <div style="color: #888; font-size: 0.9em;">863.0 B | 2025-12-27 01:34:23</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">__init__.cpython-313.pyc</div>
+                <div style="color: #888; font-size: 0.9em;">431.0 B | 2025-12-27 01:34:23</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimensiones</div>
+                <div style="color: #888; font-size: 0.9em;">(19 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-2">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">cargador_simplificado.py</div>
+                <div style="color: #888; font-size: 0.9em;">1.6 KB | 2025-12-27 01:33:58</div>
+            </div>
+        </div>
+        <div class="file-item level-2">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_1.py</div>
+                <div style="color: #888; font-size: 0.9em;">3.2 KB | 2025-12-27 01:33:58</div>
+            </div>
+        </div>
+        <div class="file-item level-2">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_10.py</div>
+                <div style="color: #888; font-size: 0.9em;">1.8 KB | 2025-12-27 01:33:58</div>
+            </div>
+        </div>
+        <div class="file-item level-2">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_11.py</div>
+                <div style="color: #888; font-size: 0.9em;">1.8 KB | 2025-12-27 01:33:58</div>
+            </div>
+        </div>
+        <div class="file-item level-2">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_12.py</div>
+                <div style="color: #888; font-size: 0.9em;">1.8 KB | 2025-12-27 01:33:58</div>
+            </div>
+        </div>
+        <div class="file-item level-2">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_1_funcional.py</div>
+                <div style="color: #888; font-size: 0.9em;">3.2 KB | 2025-12-27 01:33:58</div>
+            </div>
+        </div>
+        <div class="file-item level-2">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_2.py</div>
+                <div style="color: #888; font-size: 0.9em;">6.5 KB | 2025-12-27 01:33:58</div>
+            </div>
+        </div>
+        <div class="file-item level-2">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_3.py</div>
+                <div style="color: #888; font-size: 0.9em;">6.0 KB | 2025-12-27 01:33:58</div>
+            </div>
+        </div>
+        <div class="file-item level-2">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_4.py</div>
+                <div style="color: #888; font-size: 0.9em;">1.8 KB | 2025-12-27 01:33:58</div>
+            </div>
+        </div>
+        <div class="file-item level-2">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_5.py</div>
+                <div style="color: #888; font-size: 0.9em;">1.8 KB | 2025-12-27 01:33:58</div>
+            </div>
+        </div>
+        <div class="file-item level-2">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_6.py</div>
+                <div style="color: #888; font-size: 0.9em;">1.8 KB | 2025-12-27 01:33:58</div>
+            </div>
+        </div>
+        <div class="file-item level-2">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_7.py</div>
+                <div style="color: #888; font-size: 0.9em;">1.8 KB | 2025-12-27 01:33:58</div>
+            </div>
+        </div>
+        <div class="file-item level-2">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_8.py</div>
+                <div style="color: #888; font-size: 0.9em;">1.8 KB | 2025-12-27 01:33:58</div>
+            </div>
+        </div>
+        <div class="file-item level-2">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_9.py</div>
+                <div style="color: #888; font-size: 0.9em;">1.8 KB | 2025-12-27 01:33:58</div>
+            </div>
+        </div>
+        <div class="file-item level-2">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_base.py</div>
+                <div style="color: #888; font-size: 0.9em;">3.7 KB | 2025-12-27 01:33:58</div>
+            </div>
+        </div>
+        <div class="file-item level-2">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vector_12d.py</div>
+                <div style="color: #888; font-size: 0.9em;">16.8 KB | 2025-12-27 01:33:58</div>
+            </div>
+        </div>
+        <div class="file-item level-2">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vector_12d.py.backup</div>
+                <div style="color: #888; font-size: 0.9em;">10.2 KB | 2025-12-25 17:40:18</div>
+            </div>
+        </div>
+        <div class="file-item level-2">
+            <span class="file-icon python">🐍</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">__init__.py</div>
+                <div style="color: #888; font-size: 0.9em;">1.8 KB | 2025-12-27 01:33:58</div>
+            </div>
+        </div>
+        <div class="file-item level-2">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">__pycache__</div>
+                <div style="color: #888; font-size: 0.9em;">(16 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">cargador_simplificado.cpython-313.pyc</div>
+                <div style="color: #888; font-size: 0.9em;">2.0 KB | 2025-12-27 01:34:23</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_1.cpython-313.pyc</div>
+                <div style="color: #888; font-size: 0.9em;">4.8 KB | 2025-12-27 01:34:22</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_10.cpython-313.pyc</div>
+                <div style="color: #888; font-size: 0.9em;">2.4 KB | 2025-12-27 01:34:23</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_11.cpython-313.pyc</div>
+                <div style="color: #888; font-size: 0.9em;">2.4 KB | 2025-12-27 01:34:23</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_12.cpython-313.pyc</div>
+                <div style="color: #888; font-size: 0.9em;">2.4 KB | 2025-12-27 01:34:23</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_2.cpython-313.pyc</div>
+                <div style="color: #888; font-size: 0.9em;">8.4 KB | 2025-12-27 01:34:23</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_3.cpython-313.pyc</div>
+                <div style="color: #888; font-size: 0.9em;">7.8 KB | 2025-12-27 01:34:23</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_4.cpython-313.pyc</div>
+                <div style="color: #888; font-size: 0.9em;">2.4 KB | 2025-12-27 01:34:23</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_5.cpython-313.pyc</div>
+                <div style="color: #888; font-size: 0.9em;">2.4 KB | 2025-12-27 01:34:23</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_6.cpython-313.pyc</div>
+                <div style="color: #888; font-size: 0.9em;">2.4 KB | 2025-12-27 01:34:23</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_7.cpython-313.pyc</div>
+                <div style="color: #888; font-size: 0.9em;">2.4 KB | 2025-12-27 01:34:23</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_8.cpython-313.pyc</div>
+                <div style="color: #888; font-size: 0.9em;">2.4 KB | 2025-12-27 01:34:23</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_9.cpython-313.pyc</div>
+                <div style="color: #888; font-size: 0.9em;">2.4 KB | 2025-12-27 01:34:23</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">dimension_base.cpython-313.pyc</div>
+                <div style="color: #888; font-size: 0.9em;">6.2 KB | 2025-12-27 01:34:22</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vector_12d.cpython-313.pyc</div>
+                <div style="color: #888; font-size: 0.9em;">22.1 KB | 2025-12-27 01:34:23</div>
+            </div>
+        </div>
+        <div class="file-item level-3">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">__init__.cpython-313.pyc</div>
+                <div style="color: #888; font-size: 0.9em;">2.0 KB | 2025-12-27 01:34:22</div>
+            </div>
+        </div>
+        <div class="file-item level-1">
+            <span class="file-icon folder">📁</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">__pycache__</div>
+                <div style="color: #888; font-size: 0.9em;">(3 items)</div>
+            </div>
+        </div>
+        <div class="file-item level-2">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">auto_implementar_vecta.cpython-313.pyc</div>
+                <div style="color: #888; font-size: 0.9em;">15.7 KB | 2025-12-26 21:18:17</div>
+            </div>
+        </div>
+        <div class="file-item level-2">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_launcher.cpython-313.pyc</div>
+                <div style="color: #888; font-size: 0.9em;">15.8 KB | 2025-12-25 19:05:38</div>
+            </div>
+        </div>
+        <div class="file-item level-2">
+            <span class="file-icon other">📄</span>
+            <div style="flex: 1;">
+                <div style="color: white; font-weight: 500;">vecta_snapshot_system.cpython-313.pyc</div>
+                <div style="color: #888; font-size: 0.9em;">11.2 KB | 2025-12-25 23:16:59</div>
+            </div>
+        </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>VECTA 12D Dashboard v1.0 | Sistema de monitoreo en tiempo real</p>
+            <p>Desarrollado para Rafael Porley | 2025-12-27 04:47:12</p>
+        </div>
+    </div>
+</body>
+</html>

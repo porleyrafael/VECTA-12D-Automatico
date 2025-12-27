@@ -1,0 +1,33 @@
+RESUMEN DE INSTALACION - VECTA 12D SNAPSHOT SYSTEM
+Fecha: 2025-12-25 22:46:10
+Directorio: C:\Users\Rafael\Desktop\VECTA 12D Automatico
+
+ARCHIVOS CREADOS:
+1. vecta_snapshot_system.py - Sistema principal de snapshots
+2. vecta_auto.py - Interfaz automatica
+3. .vecta_snapshots/ - Directorio de snapshots
+
+COMO USAR:
+1. Para crear snapshot manual:
+   python vecta_snapshot_system.py snapshot "Tu razon aqui"
+
+2. Para ver snapshots disponibles:
+   python vecta_snapshot_system.py list
+
+3. Para generar reporte para chat:
+   python vecta_snapshot_system.py report
+   (Copia TODO el texto y pegalo en el chat)
+
+4. Para restaurar snapshot anterior:
+   python vecta_snapshot_system.py restore snap_YYYYMMDD_HHMMSS
+
+5. Usar interfaz automatica:
+   python vecta_auto.py
+
+ERRORES COMUNES Y SOLUCIONES:
+- Si hay error de permisos: Ejecuta como administrador
+- Si hay error de importacion: Verifica que Python sea version 3.7+
+- Si no se crean snapshots: Verifica que haya archivos .py en el directorio
+
+PARA OBTENER AYUDA:
+Copia y pega cualquier mensaje de error en el chat de asistencia.

@@ -1,0 +1,53 @@
+{
+  "timestamp": "2025-12-26T21:18:36.950282",
+  "tests": [
+    {
+      "test": "Directorio core",
+      "status": "PASS",
+      "message": "Directorio core existe"
+    },
+    {
+      "test": "Directorio dimensiones",
+      "status": "PASS",
+      "message": "Directorio dimensiones existe"
+    },
+    {
+      "test": "Directorio chat_data",
+      "status": "PASS",
+      "message": "Directorio chat_data existe"
+    },
+    {
+      "test": "Directorio chat_data/logs",
+      "status": "PASS",
+      "message": "Directorio chat_data/logs existe"
+    },
+    {
+      "test": "Directorio chat_data/learning",
+      "status": "PASS",
+      "message": "Directorio chat_data/learning existe"
+    },
+    {
+      "test": "Archivo auto_implementar_vecta_fixed.py",
+      "status": "FAIL",
+      "message": "Archivo auto_implementar_vecta_fixed.py no existe"
+    },
+    {
+      "test": "Archivo core/vecta_12d_core.py",
+      "status": "PASS",
+      "message": "Archivo core/vecta_12d_core.py existe"
+    },
+    {
+      "test": "Archivo dimensiones/vector_12d.py",
+      "status": "PASS",
+      "message": "Archivo dimensiones/vector_12d.py existe"
+    },
+    {
+      "test": "Version de Python",
+      "status": "PASS",
+      "message": "Python 3.13.3"
+    }
+  ],
+  "passed": 8,
+  "failed": 1,
+  "warnings": 0
+}

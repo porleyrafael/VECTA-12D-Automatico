@@ -1,0 +1,27 @@
+{
+  "fecha": "2025-12-27T01:24:56.440786",
+  "sistema": {
+    "estado": "activo",
+    "dimensiones_activas": 12,
+    "total_dimensiones": 12,
+    "historico_vectores": 3,
+    "tiempo_operacion": 0.9655599594116211,
+    "pesos_filosoficos": [
+      0.15,
+      0.12,
+      0.1,
+      0.08,
+      0.08,
+      0.08,
+      0.07,
+      0.07,
+      0.06,
+      0.06,
+      0.06,
+      0.07
+    ],
+    "version": "VECTA 12D Filosofico 1.0"
+  },
+  "pruebas": 3,
+  "estado": "exitoso"
+}

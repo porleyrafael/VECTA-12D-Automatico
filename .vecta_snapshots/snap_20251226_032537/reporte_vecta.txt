@@ -1,0 +1,23 @@
+VECTA 12D - ESTADO DEL SISTEMA
+==================================================
+Fecha: 2025-12-25 22:58:43
+Directorio: C:\Users\Rafael\Desktop\VECTA 12D Automatico
+
+Snapshots disponibles: 2
+- snap_20251225_224607: Instalacion inicial
+- snap_20251225_225208: inicio
+
+ARCHIVOS PRINCIPALES:
+- vecta_launcher.py (13.3 KB)
+- core/vecta_12d_core.py (1.7 KB)
+- core/meta_vecta.py (31.6 KB)
+- dimensiones/vector_12d.py (3.3 KB)
+
+PARA RESTAURAR:
+python vecta_snapshot_system.py restore SNAPSHOT_ID
+
+PARA CREAR NUEVO SNAPSHOT:
+python vecta_snapshot_system.py snapshot 'Razon'
+
+==================================================
+COPIAR TODO ESTE TEXTO Y PEGARLO EN EL CHAT

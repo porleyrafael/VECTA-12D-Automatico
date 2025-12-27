@@ -1,0 +1,101 @@
+VECTA 12D - REPORTE COMPLETO DEL SISTEMA
+============================================================
+Fecha: 2025-12-25 23:09:27
+Directorio: C:\Users\Rafael\Desktop\VECTA 12D Automatico
+============================================================
+
+1. ESTRUCTURA DEL PROYECTO:
+----------------------------------------
+📁 __pycache__/
+📁 core/
+📁 core\__pycache__/
+📁 dimensiones/
+📁 dimensiones\__pycache__/
+📄 INSTALAR.bat (434 bytes)
+📄 RESUMEN_INSTALACION.txt (1109 bytes)
+📄 analizar_carpeta.py (9591 bytes)
+📄 core\__init__.py (16 bytes)
+📄 core\config_manager.py (139 bytes)
+📄 core\meta_vecta.py (32383 bytes)
+📄 core\vecta_12d_core.py (1759 bytes)
+📄 crear_vector.py (11087 bytes)
+📄 crear_zip.py (1139 bytes)
+📄 create_vecta_package.py (5778 bytes)
+📄 dimensiones\dimension_1.py (316 bytes)
+📄 dimensiones\dimension_10.py (288 bytes)
+📄 dimensiones\dimension_11.py (273 bytes)
+📄 dimensiones\dimension_12.py (288 bytes)
+📄 dimensiones\dimension_2.py (269 bytes)
+📄 dimensiones\dimension_3.py (275 bytes)
+📄 dimensiones\dimension_4.py (284 bytes)
+📄 dimensiones\dimension_5.py (281 bytes)
+📄 dimensiones\dimension_6.py (284 bytes)
+📄 dimensiones\dimension_7.py (290 bytes)
+📄 dimensiones\dimension_8.py (290 bytes)
+📄 dimensiones\dimension_9.py (272 bytes)
+📄 dimensiones\vector_12d.py (3400 bytes)
+📄 generar_reporte_completo.py (10183 bytes)
+📄 instalar_sistema_snapshot.py (22277 bytes)
+📄 integrar_meta_vecta.py (50411 bytes)
+📄 paquete_vecta.pkg (5938 bytes)
+📄 prueba_reporte.txt (655 bytes)
+📄 prueba_vecta.py (448 bytes)
+📄 python fix_simple.py (453 bytes)
+📄 registro_incorporacion.json (301 bytes)
+📄 reparar_menu.py (9514 bytes)
+📄 reparar_opcion6.py (14702 bytes)
+📄 reparar_vecta.py (10642 bytes)
+📄 reporte_carpeta.json (109836 bytes)
+📄 reporte_vecta.txt (687 bytes)
+📄 vecta_12d_launcher.py (4510 bytes)
+📄 vecta_ai_snapshot.py (32822 bytes)
+📄 vecta_auto.py (2102 bytes)
+📄 vecta_auto_build.py (46842 bytes)
+📄 vecta_corregido.py (21215 bytes)
+📄 vecta_launcher.py (13581 bytes)
+📄 vecta_self_install.py (9983 bytes)
+📄 vecta_simple.py (20696 bytes)
+📄 vecta_snapshot_system.py (8145 bytes)
+... y 2 más
+
+2. CONTENIDO DE ARCHIVOS PRINCIPALES:
+----------------------------------------
+
+--- vecta_launcher.py ---
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+VECTA 12D LAUNCHER - Sistema Autoprogramable
+============================================
+Lanzador principal del sistema de 12 dimensiones vectoriales.
+"""
+
+import sys
+import os
+import traceback
+from datetime import datetime
+
+# Configurar path para importaciones
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, BASE_DIR)
+
+def mostrar_banner():
+    """Muestra el banner de inicio del sistema."""
+    print("\n" + "=" * 70)
+    print("╔══════════════════════════════════════════════════════════════╗")
+    print("║                   VECTA 12D - SISTEMA AUTOPROGRAMABLE        ║")
+    print("║                   12 Dimensiones Vectoriales                 ║")
+    print("╚══════════════════════════════════════════════════════════════╝")
+    print("=" * 70)
+    print(f"Inicio: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"Directorio: {BASE_DIR}")
+    print("=" * 70)
+
+def inicializar_sistema():
+    """Inicializa y verifica todos los componentes del sistema."""
+    print("\n[1/3] 🚀 INICIALIZANDO SISTEMA VECTA 12D...")
+    
+    # Verificar estructura de directorios
+    directorios_necesarios = ['core', 'dimensiones']
+    for dir_name in directorios_necesarios:
+[... ver archivo completo para más detalles ...]
