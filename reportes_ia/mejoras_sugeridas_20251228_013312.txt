@@ -1,0 +1,14 @@
+======================================================================
+           REPORTE DE MEJORAS SUGERIDAS POR IA MENTOR
+======================================================================
+
+Fecha: 2025-12-28 01:33:12
+Total mejoras sugeridas: 1
+
+[1] ==================================================
+TIPO: REFACTORIZACION
+PRIORIDAD: MEDIA
+DESCRIPCIÓN: Archivo muy grande (283 líneas)
+ARCHIVO: C:\Users\Rafael\Desktop\VECTA 12D Automatico\core\vecta_dialogo.py
+SUGERENCIA: Considerar dividir en módulos más pequeños
+

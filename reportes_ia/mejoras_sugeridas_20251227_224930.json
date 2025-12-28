@@ -1,0 +1,15 @@
+{
+  "fecha_generacion": "2025-12-27T22:49:30.173279",
+  "total_mejoras": 1,
+  "mejoras_prioridad_alta": 0,
+  "mejoras_prioridad_media": 1,
+  "mejoras_detalladas": [
+    {
+      "tipo": "refactorizacion",
+      "prioridad": "MEDIA",
+      "archivo": "C:\\Users\\Rafael\\Desktop\\VECTA 12D Automatico\\core\\vecta_dialogo.py",
+      "descripcion": "Archivo muy grande (283 líneas)",
+      "sugerencia": "Considerar dividir en módulos más pequeños"
+    }
+  ]
+}
